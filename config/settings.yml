@@ -1,0 +1,8 @@
+---
+:log:
+  :level:      :debug
+  :shift_age:  3
+  :shift_size: 1048576
+:window:
+  :width:  768
+  :height: 480
