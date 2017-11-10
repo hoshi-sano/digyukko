@@ -2,6 +2,12 @@ module DigYukko
   class Yukko < ::DXRuby::Sprite
     IMAGE = ::DXRuby::Image.new(32, 32, ::DXRuby::C_YELLOW)
     X_MOVE_UNIT = 5
+    DIR = {
+      left: -1,
+      right: 1,
+    }
+
+    attr_reader :x_dir
 
     # 足の衝突判定用クラス
     class FootCollisoin < ::DXRuby::Sprite
@@ -38,7 +44,11 @@ module DigYukko
       end
 
       def enable
-        self.x = @yukko.x - 5
+        if @yukko.x_dir > 0
+          self.x = @yukko.x + @yukko.width
+        else
+          self.x = @yukko.x - 5
+        end
         self.y = @yukko.y + 15
         self.visible = true
         self.collision_enable = true
@@ -56,6 +66,7 @@ module DigYukko
 
     def initialize(map)
       super(0, 0, IMAGE)
+      @x_dir = DIR[:right]
       @map = map
       @foot_collision = FootCollisoin.new(self)
       @spoon = Spoon.new(self)
@@ -100,12 +111,14 @@ module DigYukko
     end
 
     def move_left
+      @x_dir = DIR[:left]
       return if attacking?
       return if @map.has_block?(self.x, self.y, -X_MOVE_UNIT, height)
       self.x -= X_MOVE_UNIT
     end
 
     def move_right
+      @x_dir = DIR[:right]
       return if attacking?
       return if @map.has_block?(self.x + width, self.y, X_MOVE_UNIT, height)
       self.x += X_MOVE_UNIT
