@@ -101,11 +101,13 @@ module DigYukko
 
     def move_left
       return if attacking?
+      return if @map.has_block?(self.x, self.y, -X_MOVE_UNIT, height)
       self.x -= X_MOVE_UNIT
     end
 
     def move_right
       return if attacking?
+      return if @map.has_block?(self.x + width, self.y, X_MOVE_UNIT, height)
       self.x += X_MOVE_UNIT
     end
 
@@ -171,7 +173,7 @@ module DigYukko
     #     * 滞空時間のインクリメント
     #     * 重力によるY方向移動距離計算
     #   * Y方向移動距離の加算
-    #   * Y方向のめりこみ調整
+    #   * めりこみ回避の位置調整
     #   * 攻撃中時間の更新
     def update
       unless landing?
@@ -179,10 +181,23 @@ module DigYukko
         @y_speed = @y_speed + (@aerial_time * 9.8) / 300
       end
       self.y = self.y + @y_speed
-      # TODO: 天井にめりこまないようにする
-      # 地面にめりこまないよう位置を調整
-      @foot_collision.yukko_y_compensate
+      position_compensate
       update_attacking_time
+    end
+
+    # めりこみ回避の位置調整
+    # 縦方向のめりこみチェックと回避のみ実施
+    # 横方向はそもそもめりこまないようmove_left,move_rightで制御している
+    def position_compensate
+      res = ::DXRuby::Sprite.check(self, @map.blocks, :y_compensate, nil)
+      @foot_collision.yukko_y_compensate
+    end
+
+    def y_compensate(block)
+      # 自身より下のブロックに対する位置調整は
+      # FootCollision#yukko_y_compensateで処理するためスキップ
+      return if block.foot_y > foot_y
+      self.y = block.y + block.height if block.y < self.y
     end
 
     # 着地状態か否か

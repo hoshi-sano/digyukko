@@ -10,6 +10,14 @@ module DigYukko
       super(x * 32, y * 32 + 200, @breakable ? RED_IMAGE : WHITE_IMAGE)
     end
 
+    def height
+      self.image.height
+    end
+
+    def foot_y
+      self.y + height
+    end
+
     def break
       return unless @breakable
       vanish
