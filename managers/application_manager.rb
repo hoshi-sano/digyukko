@@ -13,6 +13,7 @@ module DigYukko
       # 実行中繰り返し呼ばれるメソッド
       def play
         current_scene.play
+        DigYukko.close('Pushed ESC Key') if KEY.down?(::DXRuby::K_ESCAPE)
       end
 
       # シーン切替時にコールするメソッド

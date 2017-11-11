@@ -43,5 +43,10 @@ module DigYukko
         ApplicationManager.play
       end
     end
+
+    def close(msg= '')
+      log(:info, "close application: #{msg}")
+      ::DXRuby::Window.close
+    end
   end
 end
