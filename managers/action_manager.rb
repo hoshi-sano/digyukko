@@ -19,8 +19,6 @@ module DigYukko
       def check_keys
         KEY.down_keys.each do |key|
           case key
-          when KEY.attack
-            @yukko.attack
           when KEY.jump
             @yukko.jump
           when KEY.left
@@ -29,6 +27,7 @@ module DigYukko
             @yukko.move_right
           end
         end
+        @yukko.attack if KEY.push?(KEY.attack)
         @yukko.nojump unless KEY.down?(KEY.jump)
       end
     end

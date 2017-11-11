@@ -4,6 +4,10 @@ module DigYukko
   #       ようにする
   module KeyManager
     class << self
+      def push?(key)
+        ::DXRuby::Input.key_push?(key)
+      end
+
       def down?(key)
         ::DXRuby::Input.key_down?(key)
       end
