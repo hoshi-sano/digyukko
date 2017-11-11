@@ -31,11 +31,12 @@ module DigYukko
 
     # 通常武器スプーン
     class Spoon < ::DXRuby::Sprite
-      IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
+      X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
+      Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
 
       def initialize(yukko)
         @yukko = yukko
-        super(@yukko.x, @yukko.y, IMAGE)
+        super(@yukko.x, @yukko.y, X_IMAGE)
         disable
       end
 
@@ -43,13 +44,20 @@ module DigYukko
         self.visible && self.collision_enable
       end
 
-      def enable
-        if @yukko.x_dir > 0
-          self.x = @yukko.x + @yukko.width
+      def enable(key_x, key_y)
+        if key_y.zero?
+          self.image = X_IMAGE
+          if key_x > 0 || @yukko.x_dir > 0
+            self.x = @yukko.x + @yukko.width
+          elsif key_x < 0 || @yukko.x_dir < 0
+            self.x = @yukko.x - 5
+          end
+          self.y = @yukko.y
         else
-          self.x = @yukko.x - 5
+          self.image = Y_IMAGE
+          self.x = @yukko.x
+          self.y = (key_y < 0) ? (@yukko.y - self.image.height) : @yukko.foot_y
         end
-        self.y = @yukko.y + 15
         self.visible = true
         self.collision_enable = true
       end
@@ -130,8 +138,8 @@ module DigYukko
     end
 
     # 攻撃アクションの処理
-    def attack
-      current_weapon.enable
+    def attack(key_x, key_y)
+      current_weapon.enable(key_x, key_y)
       start_attack_animation
     end
 

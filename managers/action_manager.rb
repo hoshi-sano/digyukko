@@ -27,7 +27,7 @@ module DigYukko
             @yukko.move_right
           end
         end
-        @yukko.attack if KEY.push?(KEY.attack)
+        @yukko.attack(KEY.x, KEY.y) if KEY.push?(KEY.attack)
         @yukko.nojump unless KEY.down?(KEY.jump)
       end
     end

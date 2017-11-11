@@ -12,6 +12,14 @@ module DigYukko
         ::DXRuby::Input.key_down?(key)
       end
 
+      def x
+        ::DXRuby::Input.x
+      end
+
+      def y
+        ::DXRuby::Input.y
+      end
+
       def down_keys
         ::DXRuby::Input.keys
       end
