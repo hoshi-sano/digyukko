@@ -15,7 +15,7 @@ module DigYukko
     attr_reader :x_dir
 
     # 足の衝突判定用クラス
-    class FootCollisoin < ::DXRuby::Sprite
+    class FootCollision < ::DXRuby::Sprite
       IMAGE = Image.new(Yukko::IMAGES[0].width, 1, ::DXRuby::C_BLUE)
 
       def initialize(yukko)
@@ -82,7 +82,7 @@ module DigYukko
       @animation_frame = 0
       super(0, 0, current_image)
       @map = map
-      @foot_collision = FootCollisoin.new(self)
+      @foot_collision = FootCollision.new(self)
       @spoon = Spoon.new(self)
       # 縦方向の移動速度
       @y_speed = 0
