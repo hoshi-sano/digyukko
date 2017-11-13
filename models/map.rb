@@ -30,12 +30,13 @@ module DigYukko
     end
 
     def generate_blocks
+      block_x_num = Config['window.width'] / Block::BREAKALE_IMAGE.width
       (0..8).map do |num|
-        line = (2..21).map { |i| Block.new(self, i, num, true) }
+        line = (2..(block_x_num - 3)).map { |i| Block.new(self, i, num, true) }
         line.unshift(Block.new(self, 1, num, false))
         line.unshift(Block.new(self, 0, num, false))
-        line.push(Block.new(self, 22, num, false))
-        line.push(Block.new(self, 23, num, false))
+        line.push(Block.new(self, block_x_num - 2, num, false))
+        line.push(Block.new(self, block_x_num - 1, num, false))
         line
       end
     end
