@@ -35,5 +35,34 @@ module DigYukko
       path = find_file(IMAGE_DIR, name, %w(png jpg))
       ::DXRuby::Image.load_tiles(path, x_count, y_count)
     end
+
+    # 引数で渡した画像データの最も暗い色をRGB配列で返す
+    def deepest_color(img)
+      res = [255, 255, 255]
+      img.height.times do |y|
+        img.width.times do |x|
+          next if img[x, y][0] < 255 # 不透明色以外は無視
+          rgb = img[x, y][1..-1]
+          rgb_sum = rgb[1..-1].inject(:+)
+          res = rgb if res.inject(:+) > rgb_sum
+        end
+      end
+      res
+    end
+
+    # 引数で渡した画像データの平均色をRGB配列で返す
+    def average_color(img)
+      sum = [0, 0, 0]
+      d = 0
+      img.height.times do |y|
+        img.width.times do |x|
+          next if img[x, y][0] < 255 # 不透明色以外は無視
+          rgb = img[x, y][1..-1]
+          rgb.each_with_index { |val, idx| sum[idx] += val }
+          d += 1
+        end
+      end
+      sum.map { |v| v / d }
+    end
   end
 end

@@ -9,6 +9,7 @@ module DigYukko
       def update_components
         @yukko.update
         @yukko.check_attack(@map.blocks)
+        @map.update
       end
 
       def draw_components
