@@ -17,16 +17,8 @@ module DigYukko
       end
 
       def check_keys
-        KEY.down_keys.each do |key|
-          case key
-          when KEY.jump
-            @yukko.jump
-          when KEY.left
-            @yukko.move_left
-          when KEY.right
-            @yukko.move_right
-          end
-        end
+        @yukko.move(KEY.x)
+        @yukko.jump if KEY.down?(KEY.jump)
         @yukko.attack(KEY.x, KEY.y) if KEY.push?(KEY.attack)
         @yukko.nojump unless KEY.down?(KEY.jump)
       end

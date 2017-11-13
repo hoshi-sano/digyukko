@@ -1,6 +1,11 @@
 module DigYukko
   class Yukko < ::DXRuby::Sprite
-    IMAGE = ::DXRuby::Image.new(32, 32, ::DXRuby::C_YELLOW)
+    include HelperMethods
+
+    IMAGE_SPLIT_X = 8
+    IMAGE_SPLIT_Y = 2
+    IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    ANIMATION_SPEED = 0.25
     X_MOVE_UNIT = 5
     DIR = {
       left: -1,
@@ -11,7 +16,7 @@ module DigYukko
 
     # 足の衝突判定用クラス
     class FootCollisoin < ::DXRuby::Sprite
-      IMAGE = Image.new(IMAGE.width, 1, ::DXRuby::C_BLUE)
+      IMAGE = Image.new(Yukko::IMAGES[0].width, 1, ::DXRuby::C_BLUE)
 
       def initialize(yukko)
         @yukko = yukko
@@ -73,8 +78,9 @@ module DigYukko
     end
 
     def initialize(map)
-      super(0, 0, IMAGE)
       @x_dir = DIR[:right]
+      @animation_frame = 0
+      super(0, 0, current_image)
       @map = map
       @foot_collision = FootCollisoin.new(self)
       @spoon = Spoon.new(self)
@@ -82,6 +88,12 @@ module DigYukko
       @y_speed = 0
       # 滞空時間(frame)
       @aerial_time = 0
+    end
+
+    def current_image
+      image_y = DIR.values.index(@x_dir)
+      image_x = @animation_frame.floor
+      IMAGES[image_y * IMAGE_SPLIT_X + image_x]
     end
 
     def x=(val)
@@ -116,6 +128,16 @@ module DigYukko
     # 足元下端の座標セット
     def foot_y=(val)
       self.y = val - height
+    end
+
+    def move(dx)
+      if dx.zero?
+        @animation_frame = 0
+        return
+      else
+        @animation_frame = (@animation_frame + ANIMATION_SPEED) % IMAGE_SPLIT_X
+        dx > 0 ? move_right : move_left
+      end
     end
 
     def move_left
@@ -197,7 +219,9 @@ module DigYukko
     #   * めりこみ回避の位置調整
     #   * 攻撃中時間の更新
     def update
-      unless landing?
+      if landing?
+        self.image = current_image
+      else
         @aerial_time += 1
         @y_speed = @y_speed + (@aerial_time * 9.8) / 300
       end

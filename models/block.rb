@@ -1,13 +1,14 @@
 module DigYukko
   class Block < ::DXRuby::Sprite
-    WHITE_IMAGE = ::DXRuby::Image.new(32, 32, ::DXRuby::C_WHITE)
-    RED_IMAGE = ::DXRuby::Image.new(32, 32).tap do |img|
-      img.box(0, 0, img.width, img.height, ::DXRuby::C_RED)
-    end
+    include HelperMethods
+
+    UNBREAKALE_IMAGE = load_image('unbreakable_block')
+    BREAKALE_IMAGE = load_image('breakable_block')
 
     def initialize(x, y, breakable)
       @breakable = breakable
-      super(x * 32, y * 32 + 200, @breakable ? RED_IMAGE : WHITE_IMAGE)
+      image = @breakable ? BREAKALE_IMAGE : UNBREAKALE_IMAGE
+      super(x * image.width, y * image.height + 200, image)
     end
 
     def height
