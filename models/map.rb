@@ -19,12 +19,24 @@ module DigYukko
 
     def update
       # プレイヤーキャラが画面の縦半分より下に移動した場合は画面を追従させる
-      dy = @yukko.y + @field_y - (Config['window.height'] / 2)
-      @field_y -= dy if dy > 0
+      if @yukko.y < field_lower_end
+        dy = @yukko.y + @field_y - window_half_height
+        @field_y -= dy if dy > 0
+      end
 
       ::DXRuby::Sprite.update(@fragments)
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
       @fragments.delete_if { |f| f.vanished? }
+    end
+
+    # 画面の半分の高さを返す
+    def window_half_height
+      @window_half_height ||= Config['window.height'] / 2
+    end
+
+    # @fieldの高さ - 画面の半分の高さを返す
+    def field_lower_end
+      @field_lower_end ||= @field.height - window_half_height
     end
 
     def has_block?(x, y, dx, height)
