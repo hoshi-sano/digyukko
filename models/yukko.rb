@@ -82,12 +82,14 @@ module DigYukko
       @animation_frame = 0
       super(0, 0, current_image)
       @map = map
+      @map.yukko = self
       @foot_collision = FootCollision.new(self)
       @spoon = Spoon.new(self)
       # 縦方向の移動速度
       @y_speed = 0
       # 滞空時間(frame)
       @aerial_time = 0
+      [self, @foot_collision, @spoon].each { |s| s.target = @map.field }
     end
 
     def current_image

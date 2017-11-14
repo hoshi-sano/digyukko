@@ -69,7 +69,8 @@ module DigYukko
         @y_speed += 1
         self.x += @x_speed
         self.y += @y_speed
-        vanish if self.x > Config['window.width'] || self.y > Config['window.height']
+        # 基本的にはMap側の制御でvanishするためここは実行されない想定
+        vanish if self.y > self.target.height
       end
     end
   end
