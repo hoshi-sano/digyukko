@@ -5,10 +5,19 @@ module DigYukko
     UNBREAKALE_IMAGE = load_image('unbreakable_block')
     BREAKALE_IMAGE = load_image('breakable_block')
 
-    def initialize(map, x, y, breakable)
+    class << self
+      def set_image(image)
+        @image = image
+      end
+
+      def image
+        @image
+      end
+    end
+
+    def initialize(map, x, y)
       @map = map
-      @breakable = breakable
-      image = @breakable ? BREAKALE_IMAGE : UNBREAKALE_IMAGE
+      image = self.class.image
       super(x * image.width, y * image.height + 200, image)
     end
 
@@ -21,13 +30,7 @@ module DigYukko
     end
 
     def break
-      return unless @breakable
-      @map.push_fragments(
-        %i[upper_left upper_right lower_left lower_right].map do |pos|
-          Fragment.new(self, pos)
-        end
-      )
-      vanish
+      raise NotImplementedError
     end
 
     # ブロックの破片を表現するクラス
