@@ -10,7 +10,6 @@ module DigYukko
       @breakable = breakable
       image = @breakable ? BREAKALE_IMAGE : UNBREAKALE_IMAGE
       super(x * image.width, y * image.height + 200, image)
-      @fragments = []
     end
 
     def height
@@ -19,16 +18,6 @@ module DigYukko
 
     def foot_y
       self.y + height
-    end
-
-    def draw
-      super
-      ::DXRuby::Sprite.draw(@fragments)
-    end
-
-    def update
-      super
-      ::DXRuby::Sprite.update(@fragments)
     end
 
     def break
