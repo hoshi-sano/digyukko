@@ -3,6 +3,7 @@ module DigYukko
   module ApplicationManager
     class << self
       def init
+        FontManager.load
         @current_scene = TitleScene.new
         @prev_scene = nil
       end

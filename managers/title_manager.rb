@@ -5,6 +5,10 @@ module DigYukko
         { x: 200, y: 300, process: -> (args) { args[:manager].go_to_next_scene } },
         { x: 200, y: 350, process: -> (args) { puts "pushed #{args}" } },
       ]
+      CHOICE_STRINGS = [
+        { x: 230, y: 300, str: 'START GAME' },
+        { x: 230, y: 350, str: 'KEY CONFIG' },
+      ]
 
       def init(*)
         @cursor = Cursor.new(CURSOR_CHOICES)
@@ -21,6 +25,9 @@ module DigYukko
       def draw_components
         ::DXRuby::Window.draw(0, 0, @bg)
         @cursor.draw
+        CHOICE_STRINGS.each do |choice|
+          ::DXRuby::Window.draw_font_ex(choice[:x], choice[:y], choice[:str], FONT[:regular])
+        end
       end
 
       def check_keys

@@ -6,3 +6,10 @@
 :window:
   :width:  768
   :height: 480
+:font:
+#  デフォルトフォントをカスタマイズする場合は
+#  以下を設定する
+#  :regular:
+#    :size: 22
+#    :name: 'FontName'
+#    :path: data/fonts/font_file.ttf
