@@ -10,6 +10,7 @@ module DigYukko
     class << self
       # このシーンで利用するManagerモジュールを指定するためのメソッド
       # Managerは以下のメソッドをコール可能であることが期待される
+      #   * init: 初期化処理
       #   * update_components: 要素の毎フレーム毎の処理の実行用
       #   * draw_components: 要素の描画用
       #   * check_keys: 当該シーン特有のキー入力処理用
@@ -34,10 +35,12 @@ module DigYukko
 
       # シーン切替時の前処理
       def pre_process
+        DigYukko.log(:debug, 'pre_process', self.class)
       end
 
       # シーン切替時の後処理
       def post_process
+        DigYukko.log(:debug, 'post_process', self.class)
       end
 
       def play

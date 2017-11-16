@@ -20,6 +20,10 @@ module DigYukko
         ::DXRuby::Input.y
       end
 
+      def pushed_y
+        (push?(up) || push?(down)) ? ::DXRuby::Input.y : 0
+      end
+
       def down_keys
         ::DXRuby::Input.keys
       end
@@ -30,6 +34,14 @@ module DigYukko
 
       def attack
         ::DXRuby::K_X
+      end
+
+      def up
+        ::DXRuby::K_UP
+      end
+
+      def down
+        ::DXRuby::K_DOWN
       end
 
       def left
