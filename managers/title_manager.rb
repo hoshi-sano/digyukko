@@ -6,13 +6,13 @@ module DigYukko
           x: 200,
           y: 300,
           str: 'START GAME',
-          process: -> (args) { args[:manager].go_to_next_scene },
+          process: -> (args) { args[:manager].go_to_next_scene(ActionScene) },
         },
         {
           x: 200,
           y: 350,
           str: 'KEY CONFIG',
-          process: -> (args) { puts "pushed #{args}" },
+          process: -> (args) { args[:manager].go_to_next_scene(KeyConfigScene) },
         },
       ]
 
@@ -41,13 +41,11 @@ module DigYukko
 
       def check_keys
         @cursor.move(KEY.pushed_y)
-        # TODO: カーソルの位置によって次のシーンを変える
         @cursor.exec if KEY.push?(KEY.attack)
       end
 
-      def go_to_next_scene
-        next_scene = ActionScene.new
-        ApplicationManager.change_scene(next_scene)
+      def go_to_next_scene(next_scene_class)
+        ApplicationManager.change_scene(next_scene_class.new)
       end
     end
   end

@@ -1,0 +1,5 @@
+---
+:key_config:
+  :attack: K_Z
+  :jump:   K_X
+  :extra:  K_C

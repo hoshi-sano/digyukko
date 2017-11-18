@@ -3,6 +3,7 @@ module DigYukko
   module ApplicationManager
     class << self
       def init
+        KEY.init
         FontManager.load
         @current_scene = TitleScene.new
         @prev_scene = nil
@@ -20,7 +21,7 @@ module DigYukko
         else
           current_scene.play
         end
-        DigYukko.close('Pushed ESC Key') if KEY.down?(::DXRuby::K_ESCAPE)
+        DigYukko.close('Pushed ESC Key') if KEY.esc_down?
       end
 
       # シーン切替時にコールするメソッド

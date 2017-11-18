@@ -42,6 +42,10 @@ module DigYukko
         YAML.load_file(File.join(config_path, 'settings.yml'))
       end
 
+      def load_user_settings
+        YAML.load_file(File.join(config_path, 'user_settings.yml'))
+      end
+
       def config_path
         File.join(DigYukko.app_root, 'config')
       end
