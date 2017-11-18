@@ -54,6 +54,7 @@ module DigYukko
           return unless KEY.push?(KEY.attack)
           if args[:manager].tmp_config.valid?(false)
             KEY.config.assign(args[:manager].tmp_config.to_h)
+            KEY.config.dump
             args[:manager].go_to_next_scene(TitleScene)
           else
             DigYukko.log(:debug, 'invalid key config, cannot return to title.', self)

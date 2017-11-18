@@ -27,7 +27,7 @@ module DigYukko
           end.to_h
         rescue => e
           DigYukko.log(:error, e.message)
-          config = DEFAULT_CONFIG
+          config = DEFAULT
         end
         DigYukko.log(:info, "use key config: #{config}", self)
         new(config)
@@ -79,9 +79,9 @@ module DigYukko
 
     def to_human_readable_hash
       {
-        jump:   human_readable(@jump),
-        attack: human_readable(@attack),
-        extra:  human_readable(@extra),
+        jump:   human_readable(@jump).to_s,
+        attack: human_readable(@attack).to_s,
+        extra:  human_readable(@extra).to_s,
       }
     end
 
@@ -95,6 +95,11 @@ module DigYukko
       return true if valid
       return false unless raise_error
       raise InvalidConfigError, "invalid key config - #{to_human_readable_hash}"
+    end
+
+    def dump
+      DigYukko.log(:info, "dump key config: #{to_human_readable_hash}", self.class)
+      Config.dump_user_settings({ key_config: to_human_readable_hash })
     end
   end
 end

@@ -46,6 +46,12 @@ module DigYukko
         YAML.load_file(File.join(config_path, 'user_settings.yml'))
       end
 
+      def dump_user_settings(hash)
+        file_path = File.join(config_path, 'user_settings.yml')
+        user_setting = File.exist?(file_path) ? YAML.load_file(file_path) : {}
+        YAML.dump(user_setting.merge(hash), File.open(file_path, 'w'))
+      end
+
       def config_path
         File.join(DigYukko.app_root, 'config')
       end

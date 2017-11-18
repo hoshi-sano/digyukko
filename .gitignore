@@ -1,6 +1,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore user setting files.
+/config/user_settings.yml
+
 # Ignore customize font files.
 /data/fonts/*
 !/data/fonts/.keep
