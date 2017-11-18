@@ -8,6 +8,9 @@
 /data/fonts/*
 !/data/fonts/.keep
 
+# Ignore custom image files.
+/data/images/title.png
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*

@@ -1,15 +1,14 @@
 module DigYukko
   class Cursor < ::DXRuby::Sprite
-    IMAGE = ::DXRuby::Image.new(20, 20).tap do |img|
-      img.triangle_fill(0,         0,
-                        0,         img.height,
-                        img.width, img.height / 2, ::DXRuby::C_WHITE)
-    end
-
-    def initialize(choices)
+    def initialize(choices, color = ::DXRuby::C_WHITE)
       @choices = choices
       @position = 0
-      super(0, 0, IMAGE)
+      image = ::DXRuby::Image.new(20, 20).tap do |img|
+        img.triangle_fill(0,         0,
+                          0,         img.height,
+                          img.width, img.height / 2, color)
+      end
+      super(0, 0, image)
       move(0)
     end
 

@@ -1,27 +1,33 @@
 module DigYukko
   module TitleManager
+    include HelperMethods
+
     class << self
       CURSOR_CHOICES = [
         {
-          x: 200,
-          y: 300,
+          x: 100,
+          y: 350,
           str: 'START GAME',
           process: -> (args) { args[:manager].go_to_next_scene(ActionScene) },
         },
         {
-          x: 200,
-          y: 350,
+          x: 100,
+          y: 400,
           str: 'KEY CONFIG',
           process: -> (args) { args[:manager].go_to_next_scene(KeyConfigScene) },
         },
       ]
 
       def init(*)
-        @cursor = Cursor.new(CURSOR_CHOICES)
-        # TODO: タイトル画面背景画像に差し替える
-        @bg = ::DXRuby::Image.new(Config['window.width'],
-                                  Config['window.height'],
-                                  ::DXRuby::C_BLUE)
+        @cursor = Cursor.new(CURSOR_CHOICES, ::DXRuby::C_BLACK)
+        if File.exist?(File.join(IMAGE_DIR, 'title.png')) ||
+           File.exist?(File.join(IMAGE_DIR, 'title.jpg'))
+          @bg = load_image('title')
+        else
+          @bg = ::DXRuby::Image.new(Config['window.width'],
+                                    Config['window.height'],
+                                    ::DXRuby::C_WHITE)
+        end
       end
 
       def update_components
@@ -35,7 +41,8 @@ module DigYukko
           ::DXRuby::Window.draw_font_ex(choice[:x] + 30,
                                         choice[:y],
                                         choice[:str],
-                                        FONT[:regular])
+                                        FONT[:regular],
+                                        color: ::DXRuby::C_BLACK)
         end
       end
 
