@@ -91,7 +91,6 @@ module DigYukko
     end
 
     def valid?(raise_error = true)
-      # TODO: 設定が正しいかどうかのチェック
       valid = to_h.values.none? { |v| v.nil? || !TABLE.values.include?(v) }
       return true if valid
       return false unless raise_error
