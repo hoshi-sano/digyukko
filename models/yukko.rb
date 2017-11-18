@@ -5,6 +5,8 @@ module DigYukko
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
     IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    WIDTH = IMAGES.first.width
+    HEIGHT = IMAGES.first.height
     ANIMATION_SPEED = 0.25
     X_MOVE_UNIT = 5
     DIR = {
@@ -16,7 +18,7 @@ module DigYukko
 
     # 足の衝突判定用クラス
     class FootCollision < ::DXRuby::Sprite
-      IMAGE = Image.new(Yukko::IMAGES[0].width, 1, ::DXRuby::C_BLUE)
+      IMAGE = Image.new(Yukko::WIDTH, 1, ::DXRuby::C_BLUE)
 
       def initialize(yukko)
         @yukko = yukko
@@ -115,11 +117,11 @@ module DigYukko
     end
 
     def width
-      self.image.width
+      self.class::WIDTH
     end
 
     def height
-      self.image.height
+      self.class::HEIGHT
     end
 
     # 足元下端の座標
@@ -145,15 +147,21 @@ module DigYukko
     def move_left
       @x_dir = DIR[:left]
       return if attacking?
-      return if @map.has_block?(self.x, self.y, -X_MOVE_UNIT, height)
-      self.x -= X_MOVE_UNIT
+      if block = @map.find_block(self.x, self.y, -X_MOVE_UNIT)
+        self.x = block.x + block.width
+      else
+        self.x -= X_MOVE_UNIT
+      end
     end
 
     def move_right
       @x_dir = DIR[:right]
       return if attacking?
-      return if @map.has_block?(self.x + width, self.y, X_MOVE_UNIT, height)
-      self.x += X_MOVE_UNIT
+      if block = @map.find_block(self.x + width, self.y, X_MOVE_UNIT)
+        self.x = block.x - width
+      else
+        self.x += X_MOVE_UNIT
+      end
     end
 
     # TODO: 状態によって別の武器も利用可能にする

@@ -21,6 +21,10 @@ module DigYukko
       super(x * image.width, y * image.height + 200, image)
     end
 
+    def width
+      self.image.width
+    end
+
     def height
       self.image.height
     end

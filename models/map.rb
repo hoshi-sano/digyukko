@@ -3,6 +3,21 @@ module DigYukko
     attr_reader :blocks, :field
     attr_writer :yukko
 
+    class BlockChecker < ::DXRuby::Sprite
+      attr_reader :block
+
+      def reset
+        @block = nil
+      end
+
+      def shot(block)
+        @block = block
+      end
+    end
+
+    BLOCK_CHECKER =
+      BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT))
+
     def initialize
       @field = ::DXRuby::RenderTarget.new(Config['window.width'],
                                           Config['window.height'] * 2)
@@ -39,12 +54,15 @@ module DigYukko
       @field_lower_end ||= @field.height - window_half_height
     end
 
-    def has_block?(x, y, dx, height)
-      # TODO: 不可視化
-      img = ::DXRuby::Image.new(dx.abs, height, ::DXRuby::C_GREEN)
-      obj_x = (dx < 0) ? (x + dx) : x
-      obj = ::DXRuby::Sprite.new(obj_x, y, img)
-      ::DXRuby::Sprite.check(obj, @blocks)
+    def find_block(x, y, dx)
+      BLOCK_CHECKER.reset
+      BLOCK_CHECKER.x = (dx < 0) ? (x + dx) : x
+      BLOCK_CHECKER.y = y
+      if ::DXRuby::Sprite.check(BLOCK_CHECKER, @blocks)
+        BLOCK_CHECKER.block
+      else
+        nil
+      end
     end
 
     def push_fragments(ary)
