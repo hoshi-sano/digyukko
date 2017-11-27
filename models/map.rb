@@ -15,12 +15,20 @@ module DigYukko
       end
     end
 
+    # ステージの両端の破壊不能ブロック数
+    SIDE_WALL_LENGTH = 2
+
+    # 1ステージの深さ(ブロック数)
+    DEPTH = 30
+
+    # ブロック当たり判定用オブジェクト
     BLOCK_CHECKER =
       BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT))
 
     def initialize
-      @field = ::DXRuby::RenderTarget.new(Config['window.width'],
-                                          Config['window.height'] * 2)
+      @field = ::DXRuby::RenderTarget
+               .new(Config['window.width'],
+                    Config['window.height'] + BreakableBlock.image.width * DEPTH)
       @field_y = 0
       @blocks = generate_blocks
       @fragments = []
@@ -70,16 +78,76 @@ module DigYukko
       @fragments = @fragments + ary
     end
 
+    # ステージのブロックをランダム生成する
     def generate_blocks
-      block_x_num = Config['window.width'] / BreakableBlock.image.width
-      (0..16).map do |num|
-        line = (2..(block_x_num - 3)).map { |i| BreakableBlock.new(self, i, num) }
-        line.unshift(UnbreakableBlock.new(self, 1, num))
-        line.unshift(UnbreakableBlock.new(self, 0, num))
-        line.push(UnbreakableBlock.new(self, block_x_num - 2, num))
-        line.push(UnbreakableBlock.new(self, block_x_num - 1, num))
+      line_length = Config['window.width'] / BreakableBlock.image.width
+      DigYukko.log(:debug, "start generate_blocks, line_length: #{line_length}", self.class)
+      line_codes = generate_line_code(line_length)
+
+      # ブロックコードから各ブロックのインスタンスへ変換する
+      line_codes.map.with_index do |line_code, line_num|
+        line = line_code.map.with_index do |code, block_num|
+          if code == BreakableBlock::CODE
+            BreakableBlock.new(self, block_num, line_num)
+          else
+            UnbreakableBlock.new(self, block_num, line_num)
+          end
+        end
         line.each { |b| b.target = @field }
       end
+    end
+
+    private
+
+    # 1ステージ分のブロックラインをブロックコード値で生成する
+    def generate_line_code(line_length)
+      line_codes = []
+      line_dat = generate_initial_line_code(line_length)
+      line_codes << line_dat[:line]
+      (DEPTH - 1).times do
+        DigYukko.log(:debug, line_dat, self.class)
+        line_dat =
+          generate_single_line_code(line_length, line_dat[:x_offset], line_dat[:b_length])
+        line_codes << line_dat[:line]
+      end
+      line_codes
+    end
+
+    # 一番最初のブロックコード値のブロックラインを固定で生成する
+    def generate_initial_line_code(length)
+      res = Array.new(SIDE_WALL_LENGTH, UnbreakableBlock::CODE)
+      res += Array.new(length - SIDE_WALL_LENGTH * 2, BreakableBlock::CODE)
+      res += Array.new(SIDE_WALL_LENGTH, UnbreakableBlock::CODE)
+      { line: res, x_offset: SIDE_WALL_LENGTH - 1, b_length: length - SIDE_WALL_LENGTH * 2 }
+    end
+
+    # 1行分のブロックラインをブロックコード値でランダム生成する
+    # 直前の行の情報を元に進行不可なブロックラインを生成しないようにする
+    def generate_single_line_code(length, prev_offset, prev_length)
+      new_offset, new_length = nil, nil
+      while invalid_offset_and_length?(length, new_offset, new_length,
+                                       prev_offset, prev_length)
+        new_offset = rand(length - SIDE_WALL_LENGTH * 2) + SIDE_WALL_LENGTH
+        new_length = rand(length - (SIDE_WALL_LENGTH * 2) - new_offset) + 1
+      end
+
+      res = Array.new(new_offset, UnbreakableBlock::CODE)
+      breakable_end = new_offset + new_length
+      while res.length < length
+        code = (res.length < breakable_end) ? BreakableBlock::CODE : UnbreakableBlock::CODE
+        res << code
+      end
+      { line: res, x_offset: new_offset, b_length: new_length }
+    end
+
+    def invalid_offset_and_length?(block_length,
+                                   new_offset, new_length,
+                                   prev_offset, prev_length)
+      new_offset.nil? ||
+        new_length.nil? ||
+        (new_offset >= prev_offset + prev_length) ||
+        (new_offset + new_length) < prev_offset ||
+        (block_length / new_length) > 2
     end
   end
 end

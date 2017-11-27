@@ -1,5 +1,7 @@
 module DigYukko
   class BreakableBlock < Block
+    CODE = 0
+
     set_image load_image('breakable_block')
 
     def break
