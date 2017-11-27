@@ -147,7 +147,7 @@ module DigYukko
     def move_left
       @x_dir = DIR[:left]
       return if attacking?
-      if block = @map.find_block(self.x, self.y, -X_MOVE_UNIT)
+      if block = @map.find_block(self.x, self.y + self.height / 4, -X_MOVE_UNIT)
         self.x = block.x + block.width
       else
         self.x -= X_MOVE_UNIT

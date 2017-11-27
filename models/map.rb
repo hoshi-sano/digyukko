@@ -23,7 +23,7 @@ module DigYukko
 
     # ブロック当たり判定用オブジェクト
     BLOCK_CHECKER =
-      BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT))
+      BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT / 2))
 
     def initialize
       @field = ::DXRuby::RenderTarget
