@@ -29,12 +29,14 @@ module DigYukko
       @field = ::DXRuby::RenderTarget
                .new(Config['window.width'],
                     Config['window.height'] + BreakableBlock.image.width * DEPTH)
+      create_field_bg
       @field_y = 0
       @blocks = generate_blocks
       @fragments = []
     end
 
     def draw
+      @field.draw(0, 0, @field_bg, -1)
       ::DXRuby::Sprite.draw(@blocks)
       ::DXRuby::Sprite.draw(@fragments)
       ::DXRuby::Window.draw(0, @field_y, @field)
@@ -98,6 +100,18 @@ module DigYukko
     end
 
     private
+
+    def create_field_bg
+      cell_image = UnbreakableBlock.image.change_hls(0, -60, 0)
+      col_size = @field.width / cell_image.width
+      row_size = @field.height / cell_image.height
+      row_size.times do |y|
+        col_size.times do |x|
+          @field.draw(x * cell_image.width, y * cell_image.height, cell_image)
+        end
+      end
+      @field_bg = @field.to_image
+    end
 
     # 1ステージ分のブロックラインをブロックコード値で生成する
     def generate_line_code(line_length)

@@ -15,7 +15,7 @@ module DigYukko
     def initialize(map, x, y)
       @map = map
       image = self.class.image
-      super(x * image.width, y * image.height + 200, image)
+      super(x * image.width, y * image.height + 192, image)
     end
 
     def width
