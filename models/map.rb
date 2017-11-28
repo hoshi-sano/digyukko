@@ -33,11 +33,13 @@ module DigYukko
       @field_y = 0
       @blocks = generate_blocks
       @fragments = []
+      @effects = []
     end
 
     def draw
       @field.draw(0, 0, @field_bg, -1)
       ::DXRuby::Sprite.draw(@blocks)
+      ::DXRuby::Sprite.draw(@effects)
       ::DXRuby::Sprite.draw(@fragments)
       ::DXRuby::Window.draw(0, @field_y, @field)
     end
@@ -50,9 +52,11 @@ module DigYukko
       end
 
       ::DXRuby::Sprite.update(@blocks)
+      ::DXRuby::Sprite.update(@effects)
       ::DXRuby::Sprite.update(@fragments)
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
       @fragments.delete_if { |f| f.vanished? }
+      @effects.delete_if { |f| f.vanished? }
     end
 
     # 画面の半分の高さを返す
@@ -79,6 +83,12 @@ module DigYukko
     def push_fragments(ary)
       ary.each { |b| b.target = @field }
       @fragments = @fragments + ary
+    end
+
+    def push_effects(effects)
+      ary = Array(effects)
+      ary.each { |b| b.target = @field }
+      @effects = @effects + ary
     end
 
     # ステージのブロックをランダム生成する

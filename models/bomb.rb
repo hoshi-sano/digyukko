@@ -50,11 +50,9 @@ module DigYukko
         @range_obj.update
         explosion! if @range_obj.limit?
       elsif @explosion
-        # 爆発中なら爆発エフェクトのupdateを行う
         # 爆発エフェクトが完了したらすべての処理を終了する
-        update_bomb_effect
-        @bomb_effect_count += 1
-        if bomb_effect_finished?
+        # 爆発エフェクトのupdateはmap側で行われるのでここでは完了チェックのみ
+        if @bomb_effect.finished?
           @explosion = false
           vanish
         end
@@ -64,23 +62,7 @@ module DigYukko
     def draw
       super
       @range_obj.draw if @ignition
-    end
-
-    # TODO: 動的に生成するのではなくて予め生成して定数にしておく
-    def update_bomb_effect
-      self.image.clear
-      self.image.circle_fill(self.image.width / 2,
-                             self.image.height / 2,
-                             self.image.width / 2,
-                             ::DXRuby::C_YELLOW)
-      self.image.circle_fill(self.image.width / 3,
-                             self.image.height / 1.5,
-                             @bomb_effect_count * 3,
-                             [0, 0, 0, 0])
-    end
-
-    def bomb_effect_finished?
-      @bomb_effect_count >= 12
+      @bomb_effect.draw if @explosion
     end
 
     def break
@@ -90,11 +72,22 @@ module DigYukko
       @range_obj.target = self.target
     end
 
+    def generate_bomb_effects
+      res =
+        [[-1, -1], [ 0, -1], [ 1, -1],
+         [-1,  0], [ 0,  0], [ 1,  0],
+         [-1,  1], [ 0,  1], [ 1,  1]].map do |dx, dy|
+        BombEffect.new(self.x + dx * self.width, self.y + dy * self.height)
+      end
+      @bomb_effect = res[4]
+      res
+    end
+
     def explosion!
       @ignition = false
       @explosion = true
-      @bomb_effect_count = 0
-      self.image = ::DXRuby::Image.new(self.image.width, self.image.height)
+      self.visible = false
+      @map.push_effects(generate_bomb_effects)
       self.collision_enable = false
 
       ::DXRuby::Sprite.check(@range_obj, @map.blocks)
