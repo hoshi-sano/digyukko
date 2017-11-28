@@ -2,9 +2,6 @@ module DigYukko
   class Block < ::DXRuby::Sprite
     include HelperMethods
 
-    UNBREAKALE_IMAGE = load_image('unbreakable_block')
-    BREAKALE_IMAGE = load_image('breakable_block')
-
     class << self
       def set_image(image)
         @image = image
@@ -40,13 +37,13 @@ module DigYukko
     # ブロックの破片を表現するクラス
     class Fragment < ::DXRuby::Sprite
       include HelperMethods
-      WIDTH = Block::BREAKALE_IMAGE.width / 2
-      HEIGHT = Block::BREAKALE_IMAGE.height / 2
+      WIDTH = BreakableBlock.image.width / 2
+      HEIGHT = BreakableBlock.image.height / 2
       CENTER = { x: WIDTH / 2, y: HEIGHT / 2 }
       IMAGE = ::DXRuby::Image.new(WIDTH, HEIGHT).tap do |img|
         base_args = [CENTER[:x], CENTER[:y], WIDTH / 2]
-        img.circle_fill(*base_args, average_color(Block::BREAKALE_IMAGE))
-        img.circle(*base_args, deepest_color(Block::BREAKALE_IMAGE))
+        img.circle_fill(*base_args, average_color(BreakableBlock.image))
+        img.circle(*base_args, deepest_color(BreakableBlock.image))
       end
 
       def initialize(x, y, x_speed, y_speed)
