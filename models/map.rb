@@ -49,6 +49,7 @@ module DigYukko
         @field_y -= dy if dy > 0
       end
 
+      ::DXRuby::Sprite.update(@blocks)
       ::DXRuby::Sprite.update(@fragments)
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
       @fragments.delete_if { |f| f.vanished? }
@@ -89,10 +90,13 @@ module DigYukko
       # ブロックコードから各ブロックのインスタンスへ変換する
       line_codes.map.with_index do |line_code, line_num|
         line = line_code.map.with_index do |code, block_num|
-          if code == BreakableBlock::CODE
+          case code
+          when BreakableBlock::CODE
             BreakableBlock.new(self, block_num, line_num)
-          else
+          when UnbreakableBlock::CODE
             UnbreakableBlock.new(self, block_num, line_num)
+          when Bomb::CODE
+            Bomb.new(self, block_num, line_num)
           end
         end
         line.each { |b| b.target = @field }
@@ -148,10 +152,16 @@ module DigYukko
       res = Array.new(new_offset, UnbreakableBlock::CODE)
       breakable_end = new_offset + new_length
       while res.length < length
-        code = (res.length < breakable_end) ? BreakableBlock::CODE : UnbreakableBlock::CODE
+        code = (res.length < breakable_end) ? breakable_code : UnbreakableBlock::CODE
         res << code
       end
       { line: res, x_offset: new_offset, b_length: new_length }
+    end
+
+    # 破壊可能なブロック、爆弾、アイテムのいずれかのコードを返す
+    # TODO: いい感じの確率で返すようにする
+    def breakable_code
+      (rand(100) > 90) ? Bomb::CODE : BreakableBlock::CODE
     end
 
     def invalid_offset_and_length?(block_length,
