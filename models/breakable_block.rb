@@ -10,6 +10,7 @@ module DigYukko
           Fragment.new(self, pos)
         end
       )
+      ActionManager.combo
       vanish
     end
   end

@@ -67,6 +67,7 @@ module DigYukko
 
     def break
       return if @ignition
+      ActionManager.combo
       @ignition = true
       @range_obj = Range.new(self, 3, 3)
       @range_obj.target = self.target

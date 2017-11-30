@@ -4,17 +4,24 @@ module DigYukko
       def init(*)
         @map = Map.new
         @yukko = Yukko.new(@map)
+        @combo_counter = ComboCounter.new
+      end
+
+      def combo
+        @combo_counter.count_up
       end
 
       def update_components
         @yukko.update
         @yukko.check_attack(@map.blocks)
         @map.update
+        @combo_counter.update
       end
 
       def draw_components
         @yukko.draw
         @map.draw
+        @combo_counter.draw
       end
 
       def check_keys
