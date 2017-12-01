@@ -14,7 +14,7 @@ module DigYukko
       right: 1,
     }
 
-    attr_reader :x_dir
+    attr_reader :x_dir, :max_life, :life
 
     # 足の衝突判定用クラス
     class FootCollision < ::DXRuby::Sprite
@@ -80,6 +80,8 @@ module DigYukko
     end
 
     def initialize(map)
+      @max_life = 100
+      @life = 100
       @x_dir = DIR[:right]
       @animation_frame = 0
       super(0, 0, current_image)
@@ -132,6 +134,14 @@ module DigYukko
     # 足元下端の座標セット
     def foot_y=(val)
       self.y = val - height
+    end
+
+    def damage(val)
+      @life -= val
+      @map.shake!
+      # TODO: 連続被弾しないように無敵時間をつくる
+      @life = 0 if @life < 0
+      # TODO: @lifeが0になったらゲームオーバー
     end
 
     def move(dx)

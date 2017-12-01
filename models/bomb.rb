@@ -32,8 +32,11 @@ module DigYukko
       end
 
       def shot(obj)
-        obj.break
-        # TODO: objがYukkoならダメージ
+        if obj.is_a?(Yukko)
+          obj.damage(@bomb.power)
+        else
+          obj.break
+        end
       end
     end
 
@@ -43,6 +46,11 @@ module DigYukko
                 img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
               }
     set_score 100
+
+    # TODO: もうちょっとなんとかする
+    def power
+      25
+    end
 
     def update
       if @ignition
@@ -94,6 +102,7 @@ module DigYukko
       self.collision_enable = false
 
       ::DXRuby::Sprite.check(@range_obj, @map.blocks)
+      ::DXRuby::Sprite.check(@range_obj, @map.yukko)
     end
   end
 end

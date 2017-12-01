@@ -1,7 +1,7 @@
 module DigYukko
   class Map
     attr_reader :blocks, :field
-    attr_writer :yukko
+    attr_accessor :yukko
 
     class BlockChecker < ::DXRuby::Sprite
       attr_reader :block
@@ -21,6 +21,12 @@ module DigYukko
     # 1ステージの深さ(ブロック数)
     DEPTH = 30
 
+    # 被ダメージ時などの画面揺れの振幅
+    AMPLITUDE = 30
+
+    # 揺れが継続するフレーム数
+    SHAKING_FRAME = 15
+
     # ブロック当たり判定用オブジェクト
     BLOCK_CHECKER =
       BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT / 2))
@@ -30,7 +36,9 @@ module DigYukko
                .new(Config['window.width'],
                     Config['window.height'] + BreakableBlock.image.width * DEPTH)
       create_field_bg
+      @field_x = 0
       @field_y = 0
+      @shake_x = 0
       @blocks = generate_blocks
       @fragments = []
       @effects = []
@@ -41,7 +49,7 @@ module DigYukko
       ::DXRuby::Sprite.draw(@blocks)
       ::DXRuby::Sprite.draw(@effects)
       ::DXRuby::Sprite.draw(@fragments)
-      ::DXRuby::Window.draw(0, @field_y, @field)
+      ::DXRuby::Window.draw(@field_x, @field_y, @field)
     end
 
     def update
@@ -53,6 +61,7 @@ module DigYukko
           ActionManager.add_depth(dy)
         end
       end
+      shake_field
 
       ::DXRuby::Sprite.update(@blocks)
       ::DXRuby::Sprite.update(@effects)
@@ -60,6 +69,12 @@ module DigYukko
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
       @fragments.delete_if { |f| f.vanished? }
       @effects.delete_if { |f| f.vanished? }
+    end
+
+    # 画面揺れを発生する
+    # 自動的に収束するため揺れを停止する用のメソッドは存在しない
+    def shake!
+      @shake_x = AMPLITUDE
     end
 
     # 画面の半分の高さを返す
@@ -117,6 +132,15 @@ module DigYukko
     end
 
     private
+
+    # 画面揺れ表現のためにfieldの位置を補正する内部メソッド
+    # 振幅の減衰もここで処理する
+    def shake_field
+      return if @shake_x.zero?
+      dir = (@shake_x * -1) / @shake_x.abs
+      @shake_x = (@shake_x.abs - (AMPLITUDE / SHAKING_FRAME)) * dir
+      @field_x = @shake_x
+    end
 
     def create_field_bg
       cell_image = UnbreakableBlock.image.change_hls(0, -60, 0)

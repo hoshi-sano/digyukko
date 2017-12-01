@@ -7,6 +7,7 @@ module DigYukko
         @combo_counter = ComboCounter.new
         @depth_counter = DepthCounter.new
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter)
+        @life_counter = LifeCounter.new(@yukko)
       end
 
       def combo
@@ -27,6 +28,7 @@ module DigYukko
         @map.update
         @combo_counter.update
         @score_counter.update
+        @life_counter.update
       end
 
       def draw_components
@@ -35,6 +37,7 @@ module DigYukko
         @combo_counter.draw
         @depth_counter.draw
         @score_counter.draw
+        @life_counter.draw
       end
 
       def check_keys
