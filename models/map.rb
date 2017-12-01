@@ -1,6 +1,6 @@
 module DigYukko
   class Map
-    attr_reader :blocks, :field
+    attr_reader :blocks, :field, :last_block
     attr_accessor :yukko
 
     class BlockChecker < ::DXRuby::Sprite
@@ -40,6 +40,7 @@ module DigYukko
       @field_y = 0
       @shake_x = 0
       @blocks = generate_blocks
+      @last_block = @blocks.flatten.sort { |b| b.foot_y }.first
       @fragments = []
       @effects = []
     end

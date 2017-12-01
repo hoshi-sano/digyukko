@@ -36,13 +36,18 @@ module DigYukko
     end
 
     def count_up
+      @stop = false
       @count += 1
       @timer = COMBO_TIMER
       @scale = 0.2
     end
 
+    def stop
+      @stop = true
+    end
+
     def update
-      return if @timer.zero?
+      return if @timer.zero? || @stop
       @timer -= 1
       @timer_gage.scale_x = @timer
       reset if @timer.zero?

@@ -9,6 +9,8 @@ module DigYukko
     }
     COUNT_UPDATE_UNIT = 4
 
+    attr_accessor :count
+
     def initialize(combo_counter, depth_counter)
       @combo_counter = combo_counter
       @depth_counter = depth_counter

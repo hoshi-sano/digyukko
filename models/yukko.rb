@@ -79,20 +79,24 @@ module DigYukko
       end
     end
 
-    def initialize(map)
+    def initialize
       @max_life = 100
       @life = 100
       @x_dir = DIR[:right]
       @animation_frame = 0
-      super(0, 0, current_image)
-      @map = map
-      @map.yukko = self
+      super(Config['window.width'] / 2, 0, current_image)
       @foot_collision = FootCollision.new(self)
       @spoon = Spoon.new(self)
       # 縦方向の移動速度
       @y_speed = 0
       # 滞空時間(frame)
       @aerial_time = 0
+    end
+
+    def map=(map)
+      @map = map
+      @map.yukko = self
+      self.y = 0
       [self, @foot_collision, @spoon].each { |s| s.target = @map.field }
     end
 
@@ -277,6 +281,16 @@ module DigYukko
         @aerial_time = 0
       end
       res
+    end
+
+    # ステージの最後のブロックを越えたかどうか
+    def over_last_row?
+      self.y > @map.last_block.foot_y
+    end
+
+    # ステージの末端(底)まで到達したかどうか
+    def at_bottom?
+      self.y > @map.field.height
     end
   end
 end

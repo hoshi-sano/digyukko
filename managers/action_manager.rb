@@ -1,12 +1,14 @@
 module DigYukko
   module ActionManager
     class << self
-      def init(*)
+      def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0)
         @map = Map.new
-        @yukko = Yukko.new(@map)
-        @combo_counter = ComboCounter.new
-        @depth_counter = DepthCounter.new
+        @yukko = yukko || Yukko.new
+        @yukko.map = @map
+        @combo_counter = combo_counter || ComboCounter.new
+        @depth_counter = depth_counter || DepthCounter.new
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter)
+        @score_counter.count = score
         @life_counter = LifeCounter.new(@yukko)
       end
 
@@ -29,6 +31,8 @@ module DigYukko
         @combo_counter.update
         @score_counter.update
         @life_counter.update
+        @combo_counter.stop if @yukko.over_last_row?
+        go_to_next_stage if @yukko.at_bottom?
       end
 
       def draw_components
@@ -45,6 +49,12 @@ module DigYukko
         @yukko.jump if KEY.down?(KEY.jump)
         @yukko.attack(KEY.x, KEY.y) if KEY.push?(KEY.attack)
         @yukko.nojump unless KEY.down?(KEY.jump)
+      end
+
+      def go_to_next_stage
+        next_scene =
+          ActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.count)
+        ApplicationManager.change_scene(next_scene)
       end
     end
   end
