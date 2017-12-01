@@ -3,6 +3,7 @@ module DigYukko
     CODE = 0
 
     set_image load_image('breakable_block')
+    set_score 10
 
     def break
       @map.push_fragments(
@@ -11,6 +12,7 @@ module DigYukko
         end
       )
       ActionManager.combo
+      ActionManager.add_score(self)
       vanish
     end
   end

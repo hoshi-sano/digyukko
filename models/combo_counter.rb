@@ -1,5 +1,7 @@
 module DigYukko
   class ComboCounter
+    attr_reader :count
+
     POSITION = { x: Config['window.width'] - 80, y: 50 }
     DISPLAY_THRESHOLD = 2
     COMBO_TIMER = 60

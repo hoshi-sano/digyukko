@@ -10,6 +10,14 @@ module DigYukko
       def image
         @image
       end
+
+      def set_score(score)
+        @score = score
+      end
+
+      def score
+        @score
+      end
     end
 
     def initialize(map, x, y)
@@ -28,6 +36,10 @@ module DigYukko
 
     def foot_y
       self.y + height
+    end
+
+    def score
+      self.class.score
     end
 
     def break

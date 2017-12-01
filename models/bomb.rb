@@ -42,6 +42,7 @@ module DigYukko
     set_image load_image('breakable_block').tap { |img|
                 img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
               }
+    set_score 100
 
     def update
       if @ignition
@@ -68,6 +69,7 @@ module DigYukko
     def break
       return if @ignition
       ActionManager.combo
+      ActionManager.add_score(self)
       @ignition = true
       @range_obj = Range.new(self, 3, 3)
       @range_obj.target = self.target

@@ -48,7 +48,10 @@ module DigYukko
       # プレイヤーキャラが画面の縦半分より下に移動した場合は画面を追従させる
       if @yukko.y < field_lower_end
         dy = @yukko.y + @field_y - window_half_height
-        @field_y -= dy if dy > 0
+        if dy > 0
+          @field_y -= dy
+          ActionManager.add_depth(dy)
+        end
       end
 
       ::DXRuby::Sprite.update(@blocks)
