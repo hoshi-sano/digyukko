@@ -2,7 +2,7 @@ module DigYukko
   class ComboCounter
     attr_reader :count
 
-    POSITION = { x: Config['window.width'] - 80, y: 50 }
+    POSITION = { x: Config['window.width'] - 80, y: 60 }
     DISPLAY_THRESHOLD = 2
     COMBO_TIMER = 60
     TIMER_GAGE_IMAGE = ::DXRuby::Image.new(1, 5, [255, 155, 0])
@@ -21,6 +21,13 @@ module DigYukko
       edge_width: 5,
       edge_level: 5,
     }
+    MAX_COMBO_STR = 'MAX COMBO: %d'
+    MAX_COMBO_STR_OPTIONS = {
+      color: ::DXRuby::C_WHITE,
+      edge: true,
+      edge_color: ::DXRuby::C_BLACK,
+    }
+
 
     def initialize
       reset
@@ -29,6 +36,8 @@ module DigYukko
       @timer_gage = ::DXRuby::Sprite.new(POSITION[:x] - 30,
                                          POSITION[:y] + 55, TIMER_GAGE_IMAGE)
       @timer_gage.center_x = 0
+      @max_combo = 0
+      @max_combo_str = sprintf(MAX_COMBO_STR, @max_combo)
     end
 
     def reset
@@ -40,6 +49,10 @@ module DigYukko
       @count += 1
       @timer = COMBO_TIMER
       @scale = 0.2
+      if @count > @max_combo
+        @max_combo = @count
+        @max_combo_str = sprintf(MAX_COMBO_STR, @max_combo)
+      end
     end
 
     def stop
@@ -54,6 +67,11 @@ module DigYukko
     end
 
     def draw
+      ::DXRuby::Window.draw_font_ex(POSITION[:x] - 120,
+                                    POSITION[:y] - 30,
+                                    @max_combo_str,
+                                    FONT[:regular],
+                                    MAX_COMBO_STR_OPTIONS)
       return if @count < DISPLAY_THRESHOLD
       opts = NUMBER_OPTIONS.merge(scale_x: @scale * 2, scale_y: @scale * 2)
       ::DXRuby::Window.draw_font_ex(POSITION[:x],
