@@ -16,6 +16,7 @@ module DigYukko
       @depth_counter = depth_counter
       @count = 0
       @reserved_count = 0
+      update_count_str
     end
 
     # 取得したスコアポイントが一気に計上・表示されるのではなく
@@ -24,9 +25,15 @@ module DigYukko
       return if @reserved_count.zero?
       @reserved_count -= COUNT_UPDATE_UNIT
       @count += COUNT_UPDATE_UNIT
+      update_count_str
       return if @reserved_count >= 0
       @count += @reserved_count
       @reserved_count = 0
+      update_count_str
+    end
+
+    def update_count_str
+      @count_str = sprintf(STR_FORMAT, @count)
     end
 
     # 破壊/取得したオブジェクトのスコアポイントに深度ボーナスと
@@ -48,7 +55,7 @@ module DigYukko
     def draw
       ::DXRuby::Window.draw_font_ex(POSITION[:x],
                                     POSITION[:y],
-                                    sprintf(STR_FORMAT, @count),
+                                    @count_str,
                                     FONT[:regular],
                                     OPTIONS)
     end

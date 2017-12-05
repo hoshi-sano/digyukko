@@ -37,7 +37,12 @@ module DigYukko
                                          POSITION[:y] + 55, TIMER_GAGE_IMAGE)
       @timer_gage.center_x = 0
       @max_combo = 0
+      update_count_str
       @max_combo_str = sprintf(MAX_COMBO_STR, @max_combo)
+    end
+
+    def update_count_str
+      @count_str = @count.to_s
     end
 
     def reset
@@ -49,6 +54,7 @@ module DigYukko
       @count += 1
       @timer = COMBO_TIMER
       @scale = 0.2
+      update_count_str
       if @count > @max_combo
         @max_combo = @count
         @max_combo_str = sprintf(MAX_COMBO_STR, @max_combo)
@@ -76,7 +82,7 @@ module DigYukko
       opts = NUMBER_OPTIONS.merge(scale_x: @scale * 2, scale_y: @scale * 2)
       ::DXRuby::Window.draw_font_ex(POSITION[:x],
                                     POSITION[:y],
-                                    @count.to_s,
+                                    @count_str,
                                     FONT[:regular],
                                     opts)
       ::DXRuby::Window.draw_font_ex(POSITION[:x] - 30,

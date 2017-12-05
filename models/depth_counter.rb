@@ -12,12 +12,22 @@ module DigYukko
 
     def initialize
       @count = 1
+      update_count_str
+    end
+
+    def update_count_str
+      @count_str = sprintf(STR_FORMAT, @count)
+    end
+
+    def count_up(val)
+      @count += val
+      update_count_str
     end
 
     def draw
       ::DXRuby::Window.draw_font_ex(POSITION[:x],
                                     POSITION[:y],
-                                    sprintf(STR_FORMAT, @count),
+                                    @count_str,
                                     FONT[:regular],
                                     OPTIONS)
     end

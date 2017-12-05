@@ -17,7 +17,7 @@ module DigYukko
       end
 
       def add_depth(val)
-        @depth_counter.count += val
+        @depth_counter.count_up(val)
       end
 
       def add_score(obj)
