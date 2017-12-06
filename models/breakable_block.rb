@@ -1,5 +1,5 @@
 module DigYukko
-  class BreakableBlock < Block
+  class BreakableBlock < FieldObject
     CODE = 0
 
     set_image load_image('breakable_block')

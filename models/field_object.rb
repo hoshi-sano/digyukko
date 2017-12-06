@@ -1,5 +1,6 @@
 module DigYukko
-  class Block < ::DXRuby::Sprite
+  # マップのフィールドに配置されるオブジェクトの基本クラス
+  class FieldObject < ::DXRuby::Sprite
     include HelperMethods
 
     class << self
