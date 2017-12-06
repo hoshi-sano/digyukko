@@ -19,6 +19,22 @@ module DigYukko
       def score
         @score
       end
+
+      def fragment(image)
+        # FieldObjectのサイズ基準はBreakableBlock
+        width = BreakableBlock.image.width / 2
+        height = BreakableBlock.image.height / 2
+        center = { x: width / 2, y: height / 2 }
+        image = ::DXRuby::Image.new(width, height).tap do |img|
+          base_args = [center[:x], center[:y], width / 2]
+          img.circle_fill(*base_args, average_color(image))
+          img.circle(*base_args, deepest_color(image))
+        end
+        fragment_class = Class.new(FieldObject::Fragment) do |klass|
+          klass.const_set(:'IMAGE', image)
+        end
+        const_set(:'Fragment', fragment_class)
+      end
     end
 
     def initialize(map, x, y)
@@ -48,22 +64,12 @@ module DigYukko
     end
 
     # ブロックの破片を表現するクラス
+    # FieldObject.fragmentで動的に継承して使われる前提
     class Fragment < ::DXRuby::Sprite
       include HelperMethods
       WIDTH = BreakableBlock.image.width / 2
       HEIGHT = BreakableBlock.image.height / 2
       CENTER = { x: WIDTH / 2, y: HEIGHT / 2 }
-      IMAGE = ::DXRuby::Image.new(WIDTH, HEIGHT).tap do |img|
-        base_args = [CENTER[:x], CENTER[:y], WIDTH / 2]
-        img.circle_fill(*base_args, average_color(BreakableBlock.image))
-        img.circle(*base_args, deepest_color(BreakableBlock.image))
-      end
-
-      def initialize(x, y, x_speed, y_speed)
-        super(x, y, IMAGE)
-        @x_speed = x_speed
-        @y_speed = y_speed
-      end
 
       POSITION_TO_PARAMS = {
         upper_left:  { dx:     0, dy: 0,      x_speed: -3, y_speed: -3 },
@@ -74,7 +80,7 @@ module DigYukko
 
       def initialize(block, position)
         param = POSITION_TO_PARAMS[position]
-        super(block.x + param[:dx], block.y + param[:dy], IMAGE)
+        super(block.x + param[:dx], block.y + param[:dy], self.class::IMAGE)
         @x_speed = param[:x_speed]
         @y_speed = param[:y_speed]
       end
