@@ -26,7 +26,7 @@ module DigYukko
 
       def update_components
         @yukko.update
-        @yukko.check_attack(@map.blocks)
+        @yukko.check_attack(@map.field_objects)
         @map.update
         @combo_counter.update
         @score_counter.update

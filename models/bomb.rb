@@ -46,11 +46,7 @@ module DigYukko
                 img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
               }
     set_score 100
-
-    # TODO: もうちょっとなんとかする
-    def power
-      25
-    end
+    set_power 25
 
     def update
       if @ignition
@@ -101,7 +97,7 @@ module DigYukko
       @map.push_effects(generate_bomb_effects)
       self.collision_enable = false
 
-      ::DXRuby::Sprite.check(@range_obj, @map.blocks)
+      ::DXRuby::Sprite.check(@range_obj, @map.field_objects)
       ::DXRuby::Sprite.check(@range_obj, @map.yukko)
     end
   end

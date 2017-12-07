@@ -1,11 +1,6 @@
 module DigYukko
-  class BreakableBlock < Block
-    CODE = 0
-
-    set_image load_image('breakable_block')
-    set_score 10
-    fragment(image)
-
+  # アイテムの基本クラス
+  class Item < FieldObject
     def break
       @map.push_fragments(
         %i[upper_left upper_right lower_left lower_right].map do |pos|

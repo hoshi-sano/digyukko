@@ -148,6 +148,12 @@ module DigYukko
       # TODO: @lifeが0になったらゲームオーバー
     end
 
+    def recover(val)
+      # TODO: 回復エフェクト
+      @life += val
+      @life = @max_life if @life > @max_life
+    end
+
     def move(dx)
       if dx.zero?
         @animation_frame = 0
@@ -242,6 +248,7 @@ module DigYukko
     #   * Y方向移動距離の加算
     #   * めりこみ回避の位置調整
     #   * 攻撃中時間の更新
+    #   * アイテムの取得チェック
     def update
       if landing?
         self.image = current_image
@@ -252,6 +259,7 @@ module DigYukko
       self.y = self.y + @y_speed
       position_compensate
       update_attacking_time
+      check_item_collision
     end
 
     # めりこみ回避の位置調整
@@ -291,6 +299,15 @@ module DigYukko
     # ステージの末端(底)まで到達したかどうか
     def at_bottom?
       self.y > @map.field.height
+    end
+
+    def check_item_collision
+      ::DXRuby::Sprite.check(self, @map.items)
+    end
+
+    def shot(obj)
+      return unless obj.item?
+      obj.effect(self)
     end
   end
 end

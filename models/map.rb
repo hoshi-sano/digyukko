@@ -1,6 +1,6 @@
 module DigYukko
   class Map
-    attr_reader :blocks, :field, :last_block
+    attr_reader :blocks, :field, :field_objects, :last_block, :items
     attr_accessor :yukko
 
     class BlockChecker < ::DXRuby::Sprite
@@ -10,8 +10,8 @@ module DigYukko
         @block = nil
       end
 
-      def shot(block)
-        @block = block
+      def shot(obj)
+        @block = obj if obj.block?
       end
     end
 
@@ -39,15 +39,17 @@ module DigYukko
       @field_x = 0
       @field_y = 0
       @shake_x = 0
-      @blocks = generate_blocks
-      @last_block = @blocks.flatten.sort { |b| b.foot_y }.first
+      @field_objects = generate_field_objects
+      @blocks = @field_objects.flatten.select(&:block?)
+      @last_block = @blocks.sort { |b| b.foot_y }.first
+      @items = @field_objects.flatten.select(&:item?)
       @fragments = []
       @effects = []
     end
 
     def draw
       @field.draw(0, 0, @field_bg, -1)
-      ::DXRuby::Sprite.draw(@blocks)
+      ::DXRuby::Sprite.draw(@field_objects)
       ::DXRuby::Sprite.draw(@effects)
       ::DXRuby::Sprite.draw(@fragments)
       ::DXRuby::Window.draw(@field_x, @field_y, @field)
@@ -64,7 +66,7 @@ module DigYukko
       end
       shake_field
 
-      ::DXRuby::Sprite.update(@blocks)
+      ::DXRuby::Sprite.update(@field_objects)
       ::DXRuby::Sprite.update(@effects)
       ::DXRuby::Sprite.update(@fragments)
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
@@ -110,8 +112,8 @@ module DigYukko
       @effects = @effects + ary
     end
 
-    # ステージのブロックをランダム生成する
-    def generate_blocks
+    # ステージのオブジェクトをランダム生成する
+    def generate_field_objects
       line_length = Config['window.width'] / BreakableBlock.image.width
       DigYukko.log(:debug, "start generate_blocks, line_length: #{line_length}", self.class)
       line_codes = generate_line_code(line_length)
@@ -126,6 +128,8 @@ module DigYukko
             UnbreakableBlock.new(self, block_num, line_num)
           when Bomb::CODE
             Bomb.new(self, block_num, line_num)
+          when LifeRecoverItem::CODE
+            LifeRecoverItem.new(self, block_num, line_num)
           end
         end
         line.each { |b| b.target = @field }
@@ -199,7 +203,14 @@ module DigYukko
     # 破壊可能なブロック、爆弾、アイテムのいずれかのコードを返す
     # TODO: いい感じの確率で返すようにする
     def breakable_code
-      (rand(100) > 90) ? Bomb::CODE : BreakableBlock::CODE
+      val = rand(100)
+      if val > 95
+        LifeRecoverItem::CODE
+      elsif val > 85
+        Bomb::CODE
+      else
+        BreakableBlock::CODE
+      end
     end
 
     def invalid_offset_and_length?(block_length,

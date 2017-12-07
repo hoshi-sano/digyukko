@@ -20,6 +20,14 @@ module DigYukko
         @score
       end
 
+      def set_power(power)
+        @power = power
+      end
+
+      def power
+        @power
+      end
+
       def fragment(image)
         # FieldObjectのサイズ基準はBreakableBlock
         width = BreakableBlock.image.width / 2
@@ -59,8 +67,20 @@ module DigYukko
       self.class.score
     end
 
+    def power
+      self.class.power
+    end
+
     def break
       raise NotImplementedError
+    end
+
+    def block?
+      self.is_a?(Block)
+    end
+
+    def item?
+      self.is_a?(Item)
     end
 
     # ブロックの破片を表現するクラス
