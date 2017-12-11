@@ -11,14 +11,16 @@ module DigYukko
       # 1フレームあたりにアルファ値に加算する数
       UPDATE_UNIT = 3
 
+      # TODO: マジックナンバーをやめる
+      IMAGE = ::DXRuby::Image.new(32, 32, ::DXRuby::C_RED)
+
       def initialize(bomb, x_range, y_range)
         @bomb = bomb
-        image = ::DXRuby::Image.new(Bomb.image.width * x_range,
-                                    Bomb.image.height * y_range,
-                                    ::DXRuby::C_RED)
-        bomb_x = @bomb.x + @bomb.image.width / 2
-        bomb_y = @bomb.y + @bomb.image.height / 2
-        super(bomb_x - image.width / 2, bomb_y - image.height / 2, image)
+        super(@bomb.x, @bomb.y, IMAGE)
+        self.center_x = Bomb.image.width / 2
+        self.center_y = Bomb.image.height / 2
+        self.scale_x = x_range
+        self.scale_y = y_range
         self.alpha = 0
         self.z = 255
       end
