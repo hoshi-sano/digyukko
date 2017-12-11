@@ -1,14 +1,27 @@
 module DigYukko
+  # 爆弾の基本クラス
   class Bomb < BreakableBlock
-    CODE = 2
+    class << self
+      def set_x_range(range)
+        @x_range = range
+      end
 
-    # TODO: 専用の画像を用意する
-    # TODO: 1種類だけではなく、爆弾の種類によって画像を変える
+      def x_range
+        @x_range
+      end
+
+      def set_y_range(range)
+        @y_range = range
+      end
+
+      def y_range
+        @y_range
+      end
+    end
+
     set_image load_image('breakable_block').tap { |img|
-                img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
-              }
-    set_score 100
-    set_power 25
+      img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
+    }
 
     def update
       if @ignition
@@ -32,23 +45,31 @@ module DigYukko
       @bomb_effect.draw if @explosion
     end
 
+    def x_range
+      self.class.x_range
+    end
+
+    def y_range
+      self.class.y_range
+    end
+
     def break
       return if @ignition
       ActionManager.combo
       ActionManager.add_score(self)
       @ignition = true
-      @range_obj = BombRange.new(self, 3, 3)
+      @range_obj = BombRange.new(self, x_range.to_a.size, y_range.to_a.size)
       @range_obj.target = self.target
     end
 
     def generate_bomb_effects
-      res =
-        [[-1, -1], [ 0, -1], [ 1, -1],
-         [-1,  0], [ 0,  0], [ 1,  0],
-         [-1,  1], [ 0,  1], [ 1,  1]].map do |dx, dy|
-        BombEffect.new(self.x + dx * self.width, self.y + dy * self.height)
+      res = []
+      y_range.each do |dy|
+        x_range.each do |dx|
+          res << BombEffect.new(self.x + dx * self.width, self.y + dy * self.height)
+        end
       end
-      @bomb_effect = res[4]
+      @bomb_effect = res[res.size / 2]
       res
     end
 

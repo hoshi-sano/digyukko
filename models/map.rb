@@ -126,8 +126,8 @@ module DigYukko
             BreakableBlock.new(self, block_num, line_num)
           when UnbreakableBlock::CODE
             UnbreakableBlock.new(self, block_num, line_num)
-          when Bomb::CODE
-            Bomb.new(self, block_num, line_num)
+          when WideSpreadBomb::CODE
+            WideSpreadBomb.new(self, block_num, line_num)
           when LifeRecoverItem::CODE
             LifeRecoverItem.new(self, block_num, line_num)
           end
@@ -207,7 +207,7 @@ module DigYukko
       if val > 95
         LifeRecoverItem::CODE
       elsif val > 85
-        Bomb::CODE
+        WideSpreadBomb::CODE
       else
         BreakableBlock::CODE
       end
