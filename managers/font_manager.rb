@@ -1,6 +1,7 @@
 module DigYukko
   module FontManager
     DEFAULT = {
+      small:   ::DXRuby::Font.new(16, 'ＭＳ Ｐゴシック'),
       regular: ::DXRuby::Font.new(22, 'ＭＳ Ｐゴシック'),
     }
 

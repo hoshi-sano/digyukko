@@ -5,7 +5,7 @@ module DigYukko
       def init
         KEY.init
         FontManager.load
-        @current_scene = TitleScene.new
+        @current_scene = StoryScene.new(:opening)
         @prev_scene = nil
       end
 

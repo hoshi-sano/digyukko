@@ -1,5 +1,7 @@
 module DigYukko
   module HelperMethods
+    require 'yaml'
+
     IMAGE_DIR = File.join(DigYukko.app_root, 'data', 'images')
 
     def self.included(base)
@@ -34,6 +36,13 @@ module DigYukko
     def load_image_tiles(name, x_count, y_count)
       path = find_file(IMAGE_DIR, name, %w(png jpg))
       ::DXRuby::Image.load_tiles(path, x_count, y_count)
+    end
+
+    # 指定したディレクトリ、名前のYAMLファイルを読み込む
+    # @param [String] name ファイル名(拡張子除く)
+    def load_yaml(dir, name)
+      path = find_file(dir, name, %w(yml yaml))
+      YAML.load_file(path)
     end
 
     # 引数で渡した画像データの最も暗い色をRGB配列で返す
