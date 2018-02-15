@@ -2,11 +2,8 @@ module DigYukko
   class Yukko < ::DXRuby::Sprite
     include HelperMethods
 
-    IMAGE_SPLIT_X = 8
-    IMAGE_SPLIT_Y = 2
-    IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
-    WIDTH = IMAGES.first.width
-    HEIGHT = IMAGES.first.height
+    WIDTH = DefaultCostume::IMAGES.first.width
+    HEIGHT = DefaultCostume::IMAGES.first.height
     ANIMATION_SPEED = 0.25
     X_MOVE_UNIT = 5
     DIR = {
@@ -14,7 +11,7 @@ module DigYukko
       right: 1,
     }
 
-    attr_reader :x_dir, :max_life, :life
+    attr_reader :x_dir, :max_life, :life, :animation_frame
 
     # 足の衝突判定用クラス
     class FootCollision < ::DXRuby::Sprite
@@ -36,57 +33,14 @@ module DigYukko
       end
     end
 
-    # 通常武器スプーン
-    class Spoon < ::DXRuby::Sprite
-      X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
-      Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
-
-      def initialize(yukko)
-        @yukko = yukko
-        super(@yukko.x, @yukko.y, X_IMAGE)
-        disable
-      end
-
-      def enabled?
-        self.visible && self.collision_enable
-      end
-
-      def enable(key_x, key_y)
-        if key_y.zero?
-          self.image = X_IMAGE
-          if key_x > 0 || @yukko.x_dir > 0
-            self.x = @yukko.x + @yukko.width
-          elsif key_x < 0 || @yukko.x_dir < 0
-            self.x = @yukko.x - 5
-          end
-          self.y = @yukko.y
-        else
-          self.image = Y_IMAGE
-          self.x = @yukko.x
-          self.y = (key_y < 0) ? (@yukko.y - self.image.height) : @yukko.foot_y
-        end
-        self.visible = true
-        self.collision_enable = true
-      end
-
-      def disable
-        self.visible = false
-        self.collision_enable = false
-      end
-
-      def shot(obj)
-        obj.break
-      end
-    end
-
     def initialize
+      @costume = DefaultCostume.new(self)
       @max_life = 100
       @life = 100
       @x_dir = DIR[:right]
       @animation_frame = 0
-      super(Config['window.width'] / 2, 0, current_image)
+      super(Config['window.width'] / 2, 0, @costume.current_image)
       @foot_collision = FootCollision.new(self)
-      @spoon = Spoon.new(self)
       # 縦方向の移動速度
       @y_speed = 0
       # 滞空時間(frame)
@@ -97,14 +51,9 @@ module DigYukko
       @map = map
       @map.yukko = self
       self.y = 0
-      [self, @foot_collision, @spoon].each { |s| s.target = @map.field }
+      [self, @foot_collision, current_weapon].each { |s| s.target = @map.field }
     end
 
-    def current_image
-      image_y = DIR.values.index(@x_dir)
-      image_x = @animation_frame.floor
-      IMAGES[image_y * IMAGE_SPLIT_X + image_x]
-    end
 
     def x=(val)
       super
@@ -123,11 +72,11 @@ module DigYukko
     end
 
     def width
-      self.class::WIDTH
+      @costume.width
     end
 
     def height
-      self.class::HEIGHT
+      @costume.height
     end
 
     # 足元下端の座標
@@ -159,7 +108,7 @@ module DigYukko
         @animation_frame = 0
         return
       else
-        @animation_frame = (@animation_frame + ANIMATION_SPEED) % IMAGE_SPLIT_X
+        @animation_frame = (@animation_frame + ANIMATION_SPEED) % @costume.class::IMAGE_SPLIT_X
         dx > 0 ? move_right : move_left
       end
     end
@@ -184,9 +133,8 @@ module DigYukko
       end
     end
 
-    # TODO: 状態によって別の武器も利用可能にする
     def current_weapon
-      @spoon
+      @costume.weapon
     end
 
     # 攻撃アクションの処理
@@ -251,7 +199,7 @@ module DigYukko
     #   * アイテムの取得チェック
     def update
       if landing?
-        self.image = current_image
+        self.image = @costume.current_image
       else
         @aerial_time += 1
         @y_speed = @y_speed + (@aerial_time * 9.8) / 300
