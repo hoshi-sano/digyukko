@@ -55,6 +55,8 @@ module DigYukko
     end
 
     def costume=(new_costume)
+      return if @costume.is_a?(new_costume)
+      ActionManager.push_cut_in_effect(CostumeChangeEffect.new(self, new_costume))
       @costume = new_costume.new(self)
     end
 

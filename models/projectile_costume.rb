@@ -3,8 +3,9 @@ module DigYukko
   class ProjectileCostume < Costume
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
-    # TODO: 画像を飛び道具射出キャラクター画像にする
-    IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    IMAGES = load_image_tiles('projectile_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    # TODO: カットイン用の画像を用意する
+    CUT_IN_IMAGE = Image.new(300, 300, ::DXRuby::C_WHITE)
 
     def update_weapon
       super

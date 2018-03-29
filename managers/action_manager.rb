@@ -10,6 +10,7 @@ module DigYukko
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter)
         @score_counter.count = score
         @life_counter = LifeCounter.new(@yukko)
+        @cut_in_effects = []
       end
 
       def combo
@@ -24,7 +25,16 @@ module DigYukko
         @score_counter.add(obj)
       end
 
+      def push_cut_in_effect(effect)
+        @cut_in_effects << effect
+      end
+
       def update_components
+        if @cut_in_effects.any?
+          @cut_in_effects.each(&:update)
+          @cut_in_effects.delete_if(&:finished?)
+          return
+        end
         @yukko.update
         @yukko.check_attack(@map.field_objects)
         @map.update
@@ -42,9 +52,11 @@ module DigYukko
         @depth_counter.draw
         @score_counter.draw
         @life_counter.draw
+        @cut_in_effects.each(&:draw)
       end
 
       def check_keys
+        return if @cut_in_effects.any?
         @yukko.move(KEY.x)
         @yukko.jump if KEY.down?(KEY.jump)
         @yukko.attack(KEY.x, KEY.y) if KEY.push?(KEY.attack)
