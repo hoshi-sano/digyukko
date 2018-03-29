@@ -12,4 +12,3 @@ module DigYukko
     end
   end
 end
-

@@ -130,6 +130,8 @@ module DigYukko
             WideSpreadBomb.new(self, block_num, line_num)
           when LifeRecoverItem::CODE
             LifeRecoverItem.new(self, block_num, line_num)
+          when ProjectileCostumeItem::CODE
+            ProjectileCostumeItem.new(self, block_num, line_num)
           end
         end
         line.each { |b| b.target = @field }
@@ -204,7 +206,9 @@ module DigYukko
     # TODO: いい感じの確率で返すようにする
     def breakable_code
       val = rand(100)
-      if val > 95
+      if val > 98
+        ProjectileCostumeItem::CODE
+      elsif val > 95
         LifeRecoverItem::CODE
       elsif val > 85
         WideSpreadBomb::CODE

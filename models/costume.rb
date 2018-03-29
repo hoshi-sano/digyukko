@@ -16,9 +16,12 @@ module DigYukko
       # X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
       # Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
 
+      attr_reader :yukko
+
       def initialize(yukko)
         @yukko = yukko
         super(@yukko.x, @yukko.y, self.class::X_IMAGE)
+        self.target = @yukko.target
         disable
       end
 
@@ -52,6 +55,10 @@ module DigYukko
       def shot(obj)
         obj.break
       end
+
+      def check_target
+        self
+      end
     end
 
     attr_reader :width, :height, :weapon
@@ -67,6 +74,10 @@ module DigYukko
       image_y = Yukko::DIR.values.index(@yukko.x_dir)
       image_x = @yukko.animation_frame.floor
       self.class::IMAGES[image_y * self.class::IMAGE_SPLIT_X + image_x]
+    end
+
+    def update_weapon
+      # TODO: 武器の見た目の更新
     end
   end
 end

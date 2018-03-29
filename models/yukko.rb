@@ -54,6 +54,9 @@ module DigYukko
       [self, @foot_collision, current_weapon].each { |s| s.target = @map.field }
     end
 
+    def costume=(new_costume)
+      @costume = new_costume.new(self)
+    end
 
     def x=(val)
       super
@@ -77,6 +80,16 @@ module DigYukko
 
     def height
       @costume.height
+    end
+
+    # 身体の中心のX座標
+    def mid_x
+      self.x + width / 2
+    end
+
+    # 身体の中心のY座標
+    def mid_y
+      self.y + height / 2
     end
 
     # 足元下端の座標
@@ -164,7 +177,7 @@ module DigYukko
 
     # 攻撃アクションの衝突判定
     def check_attack(objects)
-      ::DXRuby::Sprite.check(current_weapon, objects)
+      ::DXRuby::Sprite.check(current_weapon.check_target, objects)
     end
 
     # ジャンプ処理
@@ -205,6 +218,7 @@ module DigYukko
         @y_speed = @y_speed + (@aerial_time * 9.8) / 300
       end
       self.y = self.y + @y_speed
+      @costume.update_weapon
       position_compensate
       update_attacking_time
       check_item_collision
