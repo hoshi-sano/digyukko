@@ -4,8 +4,7 @@ module DigYukko
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
     IMAGES = load_image_tiles('projectile_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
-    # TODO: カットイン用の画像を用意する
-    CUT_IN_IMAGE = Image.new(300, 300, ::DXRuby::C_WHITE)
+    CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
 
     def update_weapon
       super
