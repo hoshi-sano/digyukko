@@ -23,41 +23,41 @@ module DigYukko
       end
     end
 
-      def initialize(*args)
-        DigYukko.log(:debug, 'initialized', self.class)
-        manager.init(*args)
-        BLACK_CURTAIN.alpha = 0
-      end
+    def initialize(*args)
+      DigYukko.log(:debug, 'initialized', self.class)
+      manager.init(*args)
+      BLACK_CURTAIN.alpha = 0
+    end
 
-      def manager
-        self.class.manager
-      end
+    def manager
+      self.class.manager
+    end
 
-      # シーン切替時の前処理
-      def pre_process
-        DigYukko.log(:debug, 'pre_process', self.class)
-      end
+    # シーン切替時の前処理
+    def pre_process
+      DigYukko.log(:debug, 'pre_process', self.class)
+    end
 
-      # シーン切替時の後処理
-      def post_process
-        DigYukko.log(:debug, 'post_process', self.class)
-      end
+    # シーン切替時の後処理
+    def post_process
+      DigYukko.log(:debug, 'post_process', self.class)
+    end
 
-      def play
-        manager.update_components
-        manager.draw_components
-        manager.check_keys
-      end
+    def play
+      manager.update_components
+      manager.draw_components
+      manager.check_keys
+    end
 
-      # シーン切替時のフェードアウト処理
-      # 入力のチェックを行わないことでフェードアウト中の操作を禁止している
-      # @return [Boolean] 次のシーンに遷移可能か否か
-      def fade_out
-        manager.update_components
-        manager.draw_components
-        BLACK_CURTAIN.alpha += (BLACK_CURTAIN.alpha > 225) ? 1 : 10
-        BLACK_CURTAIN.draw
-        BLACK_CURTAIN.alpha >= 255
-      end
+    # シーン切替時のフェードアウト処理
+    # 入力のチェックを行わないことでフェードアウト中の操作を禁止している
+    # @return [Boolean] 次のシーンに遷移可能か否か
+    def fade_out
+      manager.update_components
+      manager.draw_components
+      BLACK_CURTAIN.alpha += (BLACK_CURTAIN.alpha > 225) ? 1 : 10
+      BLACK_CURTAIN.draw
+      BLACK_CURTAIN.alpha >= 255
+    end
   end
 end
