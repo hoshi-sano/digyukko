@@ -3,6 +3,9 @@ module DigYukko
   class FieldObject < ::DXRuby::Sprite
     include HelperMethods
 
+    # オブジェクトが無いことを表現するコード
+    EMPTY_CODE = 9
+
     class << self
       def set_image(image)
         @image = image
@@ -48,7 +51,9 @@ module DigYukko
     def initialize(map, x, y)
       @map = map
       image = self.class.image
-      super(x * image.width, y * image.height + 192, image)
+      # FieldObjectのサイズ基準はBreakableBlock
+      super(x * BreakableBlock.image.width,
+            y * BreakableBlock.image.height + 192, image)
     end
 
     def width

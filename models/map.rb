@@ -40,9 +40,9 @@ module DigYukko
       @field_y = 0
       @shake_x = 0
       @field_objects = generate_field_objects
-      @blocks = @field_objects.flatten.select(&:block?)
-      @last_block = @blocks.sort { |b| b.foot_y }.first
-      @items = @field_objects.flatten.select(&:item?)
+      @blocks = @field_objects.flatten.compact.select(&:block?)
+      @last_block = @blocks.compact.sort { |b| b.foot_y }.first
+      @items = @field_objects.flatten.compact.select(&:item?)
       @fragments = []
       @effects = []
     end
@@ -134,7 +134,7 @@ module DigYukko
             ProjectileCostumeItem.new(self, block_num, line_num)
           end
         end
-        line.each { |b| b.target = @field }
+        line.each { |b| b.target = @field if b }
       end
     end
 

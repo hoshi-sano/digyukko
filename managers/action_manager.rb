@@ -1,14 +1,13 @@
 module DigYukko
   module ActionManager
     class << self
-      def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0)
-        @map = Map.new
+      def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0, map = nil)
+        @map = map || Map.new
         @yukko = yukko || Yukko.new
         @yukko.map = @map
         @combo_counter = combo_counter || ComboCounter.new
         @depth_counter = depth_counter || DepthCounter.new
-        @score_counter = ScoreCounter.new(@combo_counter, @depth_counter)
-        @score_counter.count = score
+        @score_counter = ScoreCounter.new(@combo_counter, @depth_counter, score)
         @life_counter = LifeCounter.new(@yukko)
         @cut_in_effects = []
       end
@@ -63,9 +62,20 @@ module DigYukko
         @yukko.nojump unless KEY.down?(KEY.jump)
       end
 
+      def next_scene
+        if clear?
+          FinishActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.score)
+        else
+          ActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.score)
+        end
+      end
+
+      def clear?
+        Config['clear_condition.depth'] <= @depth_counter.count &&
+          Config['clear_condition.score'] <= @score_counter.score
+      end
+
       def go_to_next_stage
-        next_scene =
-          ActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.count)
         ApplicationManager.change_scene(next_scene)
       end
     end

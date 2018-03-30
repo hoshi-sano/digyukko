@@ -17,6 +17,11 @@ module DigYukko
         width:  800,
         height: 480,
       },
+      clear_condition: {
+        # TODO: 仮の値なので調整すること
+        depth: 1000,
+        score: 1000,
+      },
     }
 
     class << self

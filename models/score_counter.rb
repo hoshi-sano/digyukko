@@ -11,12 +11,19 @@ module DigYukko
 
     attr_accessor :count
 
-    def initialize(combo_counter, depth_counter)
+    def initialize(combo_counter, depth_counter, score = 0)
       @combo_counter = combo_counter
       @depth_counter = depth_counter
-      @count = 0
+      @count = score
       @reserved_count = 0
       update_count_str
+    end
+
+    # スコアポイントを返す
+    # countには一時的な値が入っていることがあるため、
+    # 実態のスコアを取得するときにはこちらを使うこと
+    def score
+      @count + @reserved_count
     end
 
     # 取得したスコアポイントが一気に計上・表示されるのではなく
