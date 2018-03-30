@@ -26,7 +26,7 @@ module DigYukko
 
       # シーン切替時にコールするメソッド
       def change_scene(scene)
-        return if scene.class == @current_scene.class
+        return if scene_changing?
         @current_scene.post_process
         @prev_scene = @current_scene
         @current_scene = scene
