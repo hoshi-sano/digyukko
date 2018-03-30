@@ -12,6 +12,8 @@ module DigYukko
       log(:info, 'start application')
       ::DXRuby::Window.width = Config['window.width']
       ::DXRuby::Window.height = Config['window.height']
+      ::DXRuby::Window.fps = 60
+      ::DXRuby::Window.frameskip = false
       AutoLoader.run
     end
 
