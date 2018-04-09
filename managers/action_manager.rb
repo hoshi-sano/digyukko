@@ -75,6 +75,15 @@ module DigYukko
           Config['clear_condition.score'] <= @score_counter.score
       end
 
+      def result
+        {
+          yukko: @yukko,
+          combo: @combo_counter.count.to_i,
+          depth: @depth_counter.count.to_i,
+          score: @score_counter.score.to_i,
+        }
+      end
+
       def go_to_next_stage
         ApplicationManager.change_scene(next_scene)
       end

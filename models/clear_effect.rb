@@ -29,8 +29,7 @@ module DigYukko
     def finished?
       # TODO: TTLではなくクリア音楽再生完了でfinishするようにする
       if @count > 150
-        # TODO: エンドロール後はリザルト画面に遷移するようにする
-        ApplicationManager.change_scene(StoryScene.new(:ending, TitleScene))
+        ApplicationManager.change_scene(StoryScene.new(:ending, ResultScene))
         true
       else
         false

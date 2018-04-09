@@ -214,7 +214,7 @@ module DigYukko
     #   * アイテムの取得チェック
     def update
       if landing?
-        self.image = @costume.current_image
+        update_image
       else
         @aerial_time += 1
         @y_speed = @y_speed + (@aerial_time * 9.8) / 300
@@ -224,6 +224,10 @@ module DigYukko
       position_compensate
       update_attacking_time
       check_item_collision
+    end
+
+    def update_image
+      self.image = @costume.current_image
     end
 
     # めりこみ回避の位置調整
