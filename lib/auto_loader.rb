@@ -1,7 +1,8 @@
 module DigYukko
   module AutoLoader
     AUTO_LOAD_PATH = %w[lib models managers scenes]
-    LOADED_FILEDS = %w[lib/auto_loader.rb lib/config.rb lib/dig_yukko.rb]
+    LOADED_FILES = %w[lib/auto_loader.rb lib/config.rb lib/dig_yukko.rb]
+    EXCLUDES = LOADED_FILES + %w[lib/tasks/development.rb]
 
     class << self
       def run
@@ -61,7 +62,7 @@ module DigYukko
           if File.directory?(path)
             search_dir(path)
           else
-            next if LOADED_FILEDS.any? { |f| path.match(/#{f}\z/) }
+            next if EXCLUDES.any? { |f| path.match(/#{f}\z/) }
             @load_files[path] = false
           end
         end

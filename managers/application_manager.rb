@@ -4,6 +4,7 @@ module DigYukko
     class << self
       def init
         KEY.init
+        BGM.init
         FontManager.load
         @current_scene = StoryScene.new(:opening, TitleScene)
         @prev_scene = nil
@@ -21,6 +22,7 @@ module DigYukko
         else
           current_scene.play
         end
+        Ayame.update
         DigYukko.close('Pushed ESC Key') if KEY.esc_down?
       end
 

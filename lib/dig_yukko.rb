@@ -1,5 +1,6 @@
 module DigYukko
   require 'dxruby'
+  require 'ayame'
   require 'logger'
   require 'lib/config'
   require 'lib/auto_loader'

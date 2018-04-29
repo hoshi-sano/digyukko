@@ -3,6 +3,10 @@ module DigYukko
     require 'yaml'
 
     IMAGE_DIR = File.join(DigYukko.app_root, 'data', 'images')
+    CUSTOM_MUSIC_DIR = File.join(DigYukko.app_root, 'data', 'musics')
+    MUSIC_DIR = File.join(DigYukko.app_root, 'data', 'musics')
+    CUSTOM_SOUND_DIR = File.join(DigYukko.app_root, 'data', 'sounds')
+    SOUND_DIR = File.join(DigYukko.app_root, 'data', 'sounds')
 
     def self.included(base)
       # 以下で定義するメソッドをインスタンスメソッドとしても
