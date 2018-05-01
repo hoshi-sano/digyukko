@@ -9,21 +9,28 @@ module DigYukko
       ]
 
       def init
-        @list = BGM_FILE_NAMES.map { |name|
-          sound = load_music(name)
-          sound.predecode
-          [name, sound]
-        }.to_h
+        @list = {}
+        BGM_FILE_NAMES.each { |name| add(name) }
+      end
+
+      def add(name)
+        return false if @list.key?(name)
+        sound = load_music(name)
+        sound.predecode
+        @list[name] = sound
+        true
       end
 
       def play(id, loop = true)
         return if @now_playing == id
         stop if @now_playing && (@now_playing != id)
+        DigYukko.log(:debug, "start play BGM, id=[#{id}] loop=[#{loop}]")
         @list[id].play(loop ? 0 : 1, 0)
         @now_playing = id
       end
 
       def stop
+        DigYukko.log(:debug, "stop play BGM, id=[#{@now_playing}]")
         @list[@now_playing].stop(1)
         @now_playing = nil
       end

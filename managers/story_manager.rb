@@ -51,14 +51,35 @@ module DigYukko
       ALPHA_MIN = 0
       ALPHA_MAX = 255
 
+      class Event
+        attr_reader :message
+
+        def initialize(info)
+          @message = info[:message]
+          @procs = []
+
+          if info[:bgm_start]
+            bgm_name = info[:bgm_start]
+            BGM.add(bgm_name)
+            @procs << Proc.new { BGM.play(bgm_name) }
+          end
+          @procs << Proc.new { BGM.stop } if info[:bgm_stop]
+          # TODO: 効果音の再生
+        end
+
+        def exec_actions
+          @procs.each(&:call)
+        end
+      end
+
       def initialize(info)
         if info[:image_file_name]
           @image = load_image(info[:image_file_name])
         else
           @image = ::DXRuby::Image.new(1, 1)
         end
-        @messages = Array(info[:messages])
-        @message_idx = 0
+        @events = Array(info[:events]).map { |event_info| Event.new(event_info)  }
+        @event_idx = 0
         @skip = info[:skip]
         @fade_in = info[:fade_in]
         @fade_out = info[:fade_out]
@@ -95,8 +116,13 @@ module DigYukko
         @state == :finished
       end
 
+      def current_event
+        @events[@event_idx]
+      end
+
       def current_message
-        @messages[@message_idx]
+        return nil if current_event.nil?
+        current_event.message
       end
 
       def update
@@ -105,7 +131,7 @@ module DigYukko
           @alpha += @alpha_diff
           if showed?
             @alpha = ALPHA_MAX
-            @state = :display_message
+            @state = :appeared
           end
         when :fade_out
           @alpha -= @alpha_diff
@@ -114,27 +140,34 @@ module DigYukko
             @state = :finished
           end
         when :appeared
-          @state = current_message ? :display_message : :keep
-        when :display_message
+          @state = current_event ? :exec_event : :keep
+        when :exec_event
+          # 最初の1回だけEvent#exec_actionsを呼ぶ
+          current_event.exec_actions if current_event && @display_message_counter.zero?
+          # 表示するメッセージが無かったり、メッセージを表示しきった場合は
+          # keep状態に移行する
           if !current_message || !current_message[@display_message.length]
             @state = :keep
             @keep_counter = 0
             return
           end
+          # 表示する文言を徐々に増やしてメッセージ送りを表現する
           if (@display_message_counter % @message_speed).zero?
             @display_message.concat(current_message[@display_message.length])
           end
           @display_message_counter += 1
         when :keep
+          # 画像やメッセージを表示しきった状態で、一定時間表示したのちに
+          # 次のスライドへ遷移する
           @keep_counter += 1
           if (@keep_counter % @keep_duration).zero?
             @display_message = ''
             @display_message_counter = 0
-            @message_idx += 1
-            if current_message
-              @state = :display_message
+            @event_idx += 1
+            if current_event
+              @state = :exec_event
             else
-              @message_idx = 0
+              @event_idx = 0
               @state = @fade_out ? :fade_out : :finished
             end
           end
