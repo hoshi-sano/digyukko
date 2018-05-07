@@ -64,7 +64,12 @@ module DigYukko
             @procs << Proc.new { BGM.play(bgm_name) }
           end
           @procs << Proc.new { BGM.stop } if info[:bgm_stop]
-          # TODO: 効果音の再生
+
+          if info[:sound_effect]
+            se_name = info[:sound_effect]
+            SE.add(se_name)
+            @procs << Proc.new { SE.play(se_name) }
+          end
         end
 
         def exec_actions

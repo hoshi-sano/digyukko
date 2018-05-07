@@ -24,6 +24,7 @@ module DigYukko
         manager: ApplicationManager.current_scene.manager,
       }
       @choices[@position][:process].call(args)
+      SE.play(:ok)
     end
   end
 end

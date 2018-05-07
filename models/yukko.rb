@@ -190,6 +190,7 @@ module DigYukko
         # ジャンプボタンプッシュ上方向への速度追加
         @y_speed = -5
         self.y -= height / 2
+        SE.play(:jump)
       elsif @jump_button_down_time == 5 && @aerial_time <= 5
         # ジャンプボタン長押しによる上方向への速度の更なる追加
         @y_speed = -8

@@ -12,6 +12,7 @@ module DigYukko
           self.class::Fragment.new(self, pos)
         end
       )
+      SE.play(:break)
       ActionManager.combo
       ActionManager.add_score(self)
       vanish

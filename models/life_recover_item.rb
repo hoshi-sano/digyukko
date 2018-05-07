@@ -11,6 +11,7 @@ module DigYukko
     fragment(image)
 
     def effect(yukko)
+      SE.play(:got_item)
       yukko.recover(power)
       vanish
     end

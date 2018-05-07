@@ -55,6 +55,7 @@ module DigYukko
 
     def break
       return if @ignition
+      SE.play(:pre_bomb)
       ActionManager.combo
       ActionManager.add_score(self)
       @ignition = true
