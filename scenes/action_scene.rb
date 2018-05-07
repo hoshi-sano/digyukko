@@ -16,6 +16,7 @@ module DigYukko
       super
       DigYukko.log(:debug, "call GC.disable")
       GC.disable
+      BGM.play(:dungeon)
     end
 
     # シーン切替時の後処理

@@ -4,6 +4,9 @@ module DigYukko
 
     def initialize(*args)
       super
+    end
+
+    def pre_process
       BGM.play(:title)
     end
 
