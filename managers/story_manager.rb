@@ -5,10 +5,11 @@ module DigYukko
     STORY_DIR = File.join(DigYukko.app_root, 'data', 'stories')
 
     class << self
-      def init(story_type, next_scene_class)
+      def init(story_type, next_scene_class, next_scene_args = [])
         @slides = load_story(story_type)
         @slide_idx = 0
         @next_scene_class = next_scene_class
+        @next_scene_args = next_scene_args
         @skip_message = SkipMessage.new
       end
 
@@ -19,7 +20,7 @@ module DigYukko
             @slide_idx += 1
           else
             unless ApplicationManager.scene_changing?
-              ApplicationManager.change_scene(@next_scene_class.new)
+              ApplicationManager.change_scene(@next_scene_class.new(*@next_scene_args))
             end
           end
         end

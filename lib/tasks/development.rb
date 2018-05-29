@@ -4,11 +4,14 @@ BGM_LIST = {
   dungeon: '/bgm/mp3/bgm_maoudamashii_8bit28.mp3',
 }
 SE_LIST = {
-  break:    '/se/wav/se_maoudamashii_retro22.wav', # ブロック破壊音
-  got_item: '/se/wav/se_maoudamashii_retro08.wav', # アイテム取得音
-  jump:     '/se/wav/se_maoudamashii_retro03.wav', # ジャンプ
-  ok:       '/se/wav/se_maoudamashii_retro16.wav', # 決定音
-  pre_bomb: '/se/wav/se_maoudamashii_retro24.wav', # 爆発前兆音
+  break:    '/se/wav/se_maoudamashii_retro22.wav',  # ブロック破壊音
+  failed:   '/se/wav/se_maoudamashii_jingle02.wav', # 失敗音
+  fanfare:  '/se/wav/se_maoudamashii_jingle07.wav', # ファンファーレ
+  got_item: '/se/wav/se_maoudamashii_retro08.wav',  # アイテム取得音
+  jump:     '/se/wav/se_maoudamashii_retro03.wav',  # ジャンプ
+  ok:       '/se/wav/se_maoudamashii_retro16.wav',  # 決定音
+  pre_bomb: '/se/wav/se_maoudamashii_retro24.wav',  # 爆発前兆音
+  success:  '/se/wav/se_maoudamashii_jingle05.wav', # クリア音
 }
 
 

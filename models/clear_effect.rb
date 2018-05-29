@@ -9,12 +9,11 @@ module DigYukko
     MESSAGE = 'GAME CLEAR !'
 
     def initialize
-      @count = 0
-      # TODO: クリア音楽の再生開始
+      BGM.stop
+      SE.play(:fanfare)
     end
 
     def update
-      @count += 1
     end
 
     def draw
@@ -27,9 +26,8 @@ module DigYukko
     end
 
     def finished?
-      # TODO: TTLではなくクリア音楽再生完了でfinishするようにする
-      if @count > 150
-        ApplicationManager.change_scene(StoryScene.new(:ending, ResultScene))
+      if SE.finished?(:fanfare)
+        ApplicationManager.change_scene(StoryScene.new(:ending, ResultScene, :success))
         true
       else
         false

@@ -5,10 +5,13 @@ module DigYukko
     class << self
       SE_FILE_NAMES = [
         :break,    # ブロック破壊音
+        :failed,   # 失敗音
+        :fanfare,  # ファンファーレ
         :got_item, # アイテム取得音
         :jump,     # ジャンプ
         :ok,       # 決定音
         :pre_bomb, # 爆発前兆音
+        :success,  # クリア音
       ]
 
       def init
@@ -26,6 +29,10 @@ module DigYukko
 
       def play(id)
         @list[id].play(1, 0)
+      end
+
+      def finished?(id)
+        @list[id].finished?
       end
 
       def load_sound(name)

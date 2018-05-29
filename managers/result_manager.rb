@@ -10,13 +10,15 @@ module DigYukko
     LINE_IMAGE = ::DXRuby::Image.new(350, 4, ::DXRuby::C_WHITE)
 
     class << self
-      def init(*)
+      def init(succeeded_or_failed)
         @count = 0
+        @succeeded_or_failed = succeeded_or_failed
         result = ActionManager.result
         @score_strs = generate_score_strings(result)
         @yukko = result[:yukko]
         prepare_yukko
         @index = nil
+        @se_played = false
       end
 
       def generate_score_strings(result)
@@ -66,13 +68,20 @@ module DigYukko
 
       def update_components
         @count += 1
-        update_index
+        if @count % 30 == 0
+          update_index
+          if @index == @score_strs.size && !@se_played
+            SE.play(@succeeded_or_failed)
+            @se_played = true
+          end
+        end
       end
 
       def update_index
-        if @count % 30 == 0
-          @index ||= -1
-          @index += 1 if @index < @score_strs.size
+        @index ||= -1
+        if @index < @score_strs.size
+          @index += 1
+          SE.play(:break) unless @index >= @score_strs.size
         end
       end
 
@@ -85,15 +94,20 @@ module DigYukko
 
       def check_keys
         return unless KEY.push?(KEY.attack)
-        if @index && @index >= @score_strs.size
+        if @index && @index >= @score_strs.size && se_finished?
           go_to_title_scene
         else
+          SE.play(:break) if @index < @score_strs.size
           @index = @score_strs.size
         end
       end
 
       def go_to_title_scene
         ApplicationManager.change_scene(TitleScene.new)
+      end
+
+      def se_finished?
+        @se_played && SE.finished?(@succeeded_or_failed)
       end
     end
 
