@@ -35,7 +35,7 @@ module DigYukko
       def check_keys
         return if ApplicationManager.scene_changing?
         if KEY.pushed_keys.any? && @slides[@slide_idx].skip?
-          ApplicationManager.change_scene(@next_scene_class.new)
+          ApplicationManager.change_scene(@next_scene_class.new(*@next_scene_args))
         end
       end
 
