@@ -163,6 +163,9 @@ module DigYukko
           end
           @display_message_counter += 1
         when :keep
+          # @keep_durationに負の数を指定した場合は
+          # キー押下によるskipが行われるまでスライドを表示し続ける
+          return if @keep_duration < 0
           # 画像やメッセージを表示しきった状態で、一定時間表示したのちに
           # 次のスライドへ遷移する
           @keep_counter += 1
