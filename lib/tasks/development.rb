@@ -11,6 +11,7 @@ SE_LIST = {
   got_item: '/se/wav/se_maoudamashii_retro08.wav',   # アイテム取得音
   jump:     '/se/wav/se_maoudamashii_retro03.wav',   # ジャンプ
   ok:       '/se/wav/se_maoudamashii_retro16.wav',   # 決定音
+  power_up: 'se/wav/se_maoudamashii_magical13.wav',  # パワーアップ音
   pre_bomb: '/se/wav/se_maoudamashii_retro24.wav',   # 爆発前兆音
   success:  '/se/wav/se_maoudamashii_jingle05.wav',  # クリア音
 }

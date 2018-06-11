@@ -6,6 +6,7 @@ module DigYukko
       @twinkle = TwinkleEffect.new(yukko)
       @cut_in = CutInEffect.new(new_costume_class)
       @flash = FlashEffect.new(@cut_in)
+      SE.play(:power_up)
     end
 
     def update

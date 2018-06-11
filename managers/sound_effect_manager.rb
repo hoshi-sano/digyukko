@@ -12,6 +12,7 @@ module DigYukko
         :jump,     # ジャンプ
         :ok,       # 決定音
         :pre_bomb, # 爆発前兆音
+        :power_up, # パワーアップ音
         :success,  # クリア音
       ]
 
