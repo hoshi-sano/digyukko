@@ -108,8 +108,10 @@ module DigYukko
       @life -= val
       @map.shake!
       # TODO: 連続被弾しないように無敵時間をつくる
-      @life = 0 if @life < 0
-      # TODO: @lifeが0になったらゲームオーバー
+      if @life <= 0
+        @life = 0
+        ActionManager.push_cut_in_effect(FailedEffect.new(self, @map))
+      end
     end
 
     def recover(val)
@@ -190,7 +192,7 @@ module DigYukko
         # ジャンプボタンプッシュ上方向への速度追加
         @y_speed = -5
         self.y -= height / 2
-        SE.play(:jump)
+        SE.play(:jump) if @life > 0
       elsif @jump_button_down_time == 5 && @aerial_time <= 5
         # ジャンプボタン長押しによる上方向への速度の更なる追加
         @y_speed = -8
@@ -217,14 +219,18 @@ module DigYukko
       if landing?
         update_image
       else
-        @aerial_time += 1
-        @y_speed = @y_speed + (@aerial_time * 9.8) / 300
+        update_aerial_params
       end
       self.y = self.y + @y_speed
       @costume.update_weapon
       position_compensate
       update_attacking_time
       check_item_collision
+    end
+
+    def update_aerial_params
+      @aerial_time += 1
+      @y_speed = @y_speed + (@aerial_time * 9.8) / 300
     end
 
     def update_image

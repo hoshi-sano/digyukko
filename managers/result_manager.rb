@@ -11,6 +11,7 @@ module DigYukko
 
     class << self
       def init(succeeded_or_failed)
+        BGM.stop
         @count = 0
         @succeeded_or_failed = succeeded_or_failed
         result = ActionManager.result

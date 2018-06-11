@@ -7,6 +7,7 @@ module DigYukko
         :break,    # ブロック破壊音
         :failed,   # 失敗音
         :fanfare,  # ファンファーレ
+        :fatal,    # 致命傷
         :got_item, # アイテム取得音
         :jump,     # ジャンプ
         :ok,       # 決定音
