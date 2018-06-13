@@ -227,7 +227,7 @@ module DigYukko
       new_offset.nil? ||
         new_length.nil? ||
         (new_offset >= prev_offset + prev_length) ||
-        (new_offset + new_length) < prev_offset ||
+        (new_offset + new_length) <= prev_offset ||
         (block_length / new_length) > 2
     end
   end
