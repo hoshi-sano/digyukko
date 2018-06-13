@@ -74,6 +74,10 @@ module DigYukko
       @effects.delete_if { |f| f.vanished? }
     end
 
+    def random(max)
+      ApplicationManager.random_number_generator.rand(0..max)
+    end
+
     # 画面揺れを発生する
     # 自動的に収束するため揺れを停止する用のメソッドは存在しない
     def shake!
@@ -189,8 +193,8 @@ module DigYukko
       new_offset, new_length = nil, nil
       while invalid_offset_and_length?(length, new_offset, new_length,
                                        prev_offset, prev_length)
-        new_offset = rand(length - SIDE_WALL_LENGTH * 2) + SIDE_WALL_LENGTH
-        new_length = rand(length - (SIDE_WALL_LENGTH * 2) - new_offset) + 1
+        new_offset = random(length - SIDE_WALL_LENGTH * 2) + SIDE_WALL_LENGTH
+        new_length = random(length - SIDE_WALL_LENGTH - new_offset) + 1
       end
 
       res = Array.new(new_offset, UnbreakableBlock::CODE)
@@ -205,7 +209,7 @@ module DigYukko
     # 破壊可能なブロック、爆弾、アイテムのいずれかのコードを返す
     # TODO: いい感じの確率で返すようにする
     def breakable_code
-      val = rand(100)
+      val = random(100)
       if val > 98
         ProjectileCostumeItem::CODE
       elsif val > 95

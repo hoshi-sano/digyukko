@@ -7,8 +7,19 @@ module DigYukko
         BGM.init
         SE.init
         FontManager.load
+        init_random_number_generator
         @current_scene = StoryScene.new(:opening, TitleScene)
         @prev_scene = nil
+      end
+
+      def init_random_number_generator
+        seed = Config['random_seed'] || ::Random.new_seed
+        DigYukko.log(:debug, "use Random seed: #{seed}")
+        @random_number_generator = ::Random.new(seed)
+      end
+
+      def random_number_generator
+        @random_number_generator
       end
 
       def current_scene
