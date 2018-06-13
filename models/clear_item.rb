@@ -13,5 +13,8 @@ module DigYukko
       ActionManager.push_cut_in_effect(ClearEffect.new)
       self.collision_enable = false
     end
+
+    def break
+    end
   end
 end
