@@ -230,7 +230,10 @@ module DigYukko
 
     def update_aerial_params
       @aerial_time += 1
+      # TODO: 落下速度計算は見直しの余地あり
       @y_speed = @y_speed + (@aerial_time * 9.8) / 300
+      @y_speed = height if @y_speed > height
+      @y_speed
     end
 
     def update_image
