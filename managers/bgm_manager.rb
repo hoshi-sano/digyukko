@@ -30,6 +30,7 @@ module DigYukko
       end
 
       def stop
+        return unless @now_playing
         DigYukko.log(:debug, "stop play BGM, id=[#{@now_playing}]")
         @list[@now_playing].stop(1)
         @now_playing = nil
