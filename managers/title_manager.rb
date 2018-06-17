@@ -20,8 +20,7 @@ module DigYukko
 
       def init(*)
         @cursor = Cursor.new(CURSOR_CHOICES, ::DXRuby::C_BLACK)
-        if File.exist?(File.join(IMAGE_DIR, 'title.png')) ||
-           File.exist?(File.join(IMAGE_DIR, 'title.jpg'))
+        if find_file([CUSTOM_IMAGE_DIR, IMAGE_DIR], 'title', %w(png jpg))
           @bg = load_image('title')
         else
           @bg = ::DXRuby::Image.new(Config['window.width'],

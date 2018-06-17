@@ -2,10 +2,11 @@ module DigYukko
   module HelperMethods
     require 'yaml'
 
+    CUSTOM_IMAGE_DIR = File.join(DigYukko.app_root, 'customize', 'images')
     IMAGE_DIR = File.join(DigYukko.app_root, 'data', 'images')
-    CUSTOM_MUSIC_DIR = File.join(DigYukko.app_root, 'data', 'musics')
+    CUSTOM_MUSIC_DIR = File.join(DigYukko.app_root, 'customize', 'musics')
     MUSIC_DIR = File.join(DigYukko.app_root, 'data', 'musics')
-    CUSTOM_SOUND_DIR = File.join(DigYukko.app_root, 'data', 'sounds')
+    CUSTOM_SOUND_DIR = File.join(DigYukko.app_root, 'customize', 'sounds')
     SOUND_DIR = File.join(DigYukko.app_root, 'data', 'sounds')
 
     def self.included(base)
@@ -28,7 +29,7 @@ module DigYukko
     # 画像配置用ディレクトリから指定した名前の画像ファイルを読み込む
     # @param [String] name ファイル名(拡張子除く)
     def load_image(name)
-      path = find_file(IMAGE_DIR, name, %w(png jpg))
+      path = find_file([CUSTOM_IMAGE_DIR, IMAGE_DIR], name, %w(png jpg))
       ::DXRuby::Image.load(path)
     end
 
@@ -38,7 +39,7 @@ module DigYukko
     # @param [Integer] x_count X軸分割数
     # @param [Integer] y_count Y軸分割数
     def load_image_tiles(name, x_count, y_count)
-      path = find_file(IMAGE_DIR, name, %w(png jpg))
+      path = find_file([CUSTOM_IMAGE_DIR, IMAGE_DIR], name, %w(png jpg))
       ::DXRuby::Image.load_tiles(path, x_count, y_count)
     end
 

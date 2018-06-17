@@ -2,6 +2,7 @@ module DigYukko
   module StoryManager
     include HelperMethods
 
+    CUSTOM_STORY_DIR = File.join(DigYukko.app_root, 'customize', 'stories')
     STORY_DIR = File.join(DigYukko.app_root, 'data', 'stories')
 
     class << self
@@ -40,7 +41,7 @@ module DigYukko
       end
 
       def load_story(story_type)
-        load_yaml(STORY_DIR, story_type).map do |slide_info|
+        load_yaml([CUSTOM_STORY_DIR, STORY_DIR], story_type).map do |slide_info|
           Slide.new(slide_info)
         end
       end
