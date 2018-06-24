@@ -3,6 +3,9 @@ module DigYukko
     AUTO_LOAD_PATH = %w[lib models managers scenes]
     LOADED_FILES = %w[lib/auto_loader.rb lib/config.rb lib/dig_yukko.rb]
     EXCLUDES = LOADED_FILES + %w[lib/tasks/development.rb]
+    # rpkでパッケージングした場合に生成されるディレクトリを
+    # ロード対称から除外するために以下を定義
+    EXCLUDE_DIRS = %w[lib/ruby]
 
     class << self
       def run
@@ -56,6 +59,7 @@ module DigYukko
       end
 
       def search_dir(dir)
+        return if EXCLUDE_DIRS.any? { |d| dir.match(/#{d}\z/) }
         DigYukko.log(:debug, "search dir: #{dir}", self)
         Dir.glob(File.join(dir, '*')).each do |path|
           DigYukko.log(:debug, "find: #{path}", self)

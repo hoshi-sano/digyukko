@@ -1,0 +1,9 @@
+{
+  "extra" : [
+    "Ayame.dll",
+    "config",
+    "customize",
+    "data",
+    "log"
+  ]
+}
