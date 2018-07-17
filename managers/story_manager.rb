@@ -41,8 +41,11 @@ module DigYukko
       end
 
       def load_story(story_type)
+        prev_info = {}
         load_yaml([CUSTOM_STORY_DIR, STORY_DIR], story_type).map do |slide_info|
-          Slide.new(slide_info)
+          slide = Slide.new(slide_info, prev_info)
+          prev_info = slide.info
+          slide
         end
       end
     end
@@ -79,7 +82,23 @@ module DigYukko
         end
       end
 
-      def initialize(info)
+      # 以下指定可能な値の一覧。
+      # image_file_name以外は指定しない場合は前のスライドの値を継続する。
+      # カッコ内はデフォルト値。(最初のスライドで指定しなかった場合に利用される)
+      #
+      #   * image_file_name: スライド画像のファイル名 (なし)
+      #   * skip: ボタン押下によるスキップを許容するか否か (nil)
+      #   * fade_in: スライド表示開始時にフェードインするか否か (nil)
+      #   * fade_out: スライド表示終了時にフェードインするか否か (nil)
+      #   * alpha_diff: フェードイン・フェードアウトする際の速さ(3)
+      #   * image_x: スライド画像の表示位置のx座標 (画像が中央にくるx座標)
+      #   * image_y: スライド画像の表示位置のy座標 (画像が中央にくるy座標)
+      #   * message_x: 文章の表示位置のx座標 (画像のx座標)
+      #   * message_y: 文章の表示位置のy座標 (画像の下端+20pixel)
+      #   * message_speed: 文章の表示速度 (5)
+      #   * keep_duration: 表示し終えたスライドの表示継続時間 (message_speed * 30)
+      #
+      def initialize(info, prev_info = {})
         if info[:image_file_name]
           @image = load_image(info[:image_file_name])
         else
@@ -87,24 +106,39 @@ module DigYukko
         end
         @events = Array(info[:events]).map { |event_info| Event.new(event_info)  }
         @event_idx = 0
-        @skip = info[:skip]
-        @fade_in = info[:fade_in]
-        @fade_out = info[:fade_out]
+        @skip = info.key?(:skip) ? info[:skip] : prev_info[:skip]
+        @fade_in = info.key?(:fade_in) ? info[:fade_in] : prev_info[:fade_in]
+        @fade_out = info.key?(:fade_out) ? info[:fade_out] : prev_info[:fade_out]
         @state = @fade_in ? :fade_in : :appeared
         @alpha = @fade_in ? ALPHA_MIN : ALPHA_MAX
-        @alpha_diff = info[:alpha_diff] || 3
+        @alpha_diff = info[:alpha_diff]  || prev_info[:alpha_diff] || 3
         @r_target = ::DXRuby::RenderTarget
                     .new(Config['window.width'],
                          Config['window.height'])
-        @image_x = info[:image_x] || @r_target.width / 2 - @image.width / 2
-        @image_y = info[:image_y] || @r_target.height / 2 - @image.height / 2
-        @message_x = info[:message_x] || @image_x
-        @message_y = info[:message_y] || @image_y + @image.height + 20
-        @message_speed = info[:message_speed] || 5
-        @keep_duration = info[:keep_duration] || @message_speed * 30
+        @image_x = info[:image_x] || prev_info[:image_x] || @r_target.width / 2 - @image.width / 2
+        @image_y = info[:image_y] || prev_info[:image_y] || @r_target.height / 2 - @image.height / 2
+        @message_x = info[:message_x] || prev_info[:message_x] || @image_x
+        @message_y = info[:message_y] || prev_info[:message_y] || @image_y + @image.height + 20
+        @message_speed = info[:message_speed] || prev_info[:message_speed] || 5
+        @keep_duration = info[:keep_duration] || prev_info[:keep_duration] || @message_speed * 30
         @display_message = ''
         @display_message_counter = 0
         @keep_counter = 0
+      end
+
+      def info
+        {
+          skip:          @skip,
+          fade_in:       @fade_in,
+          fade_out:      @fade_out,
+          alpha_diff:    @alpha_diff,
+          image_x:       @image_x,
+          image_y:       @image_y,
+          message_x:     @message_x,
+          message_y:     @message_y,
+          message_speed: @message_speed,
+          keep_duration: @keep_duration,
+        }
       end
 
       def skip?
