@@ -11,6 +11,20 @@
 # Ignore custom image files.
 /data/images/title.png
 
+# Ignore sound files.
+/data/musics/*
+/data/sounds/*
+!/data/musics/.keep
+!/data/sounds/.keep
+!/data/sounds/silent.wav
+
+# Ignore customize files.
+/customize/**/*
+!/customize/images/.keep
+!/customize/musics/.keep
+!/customize/sounds/.keep
+!/customize/stories/.keep
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
