@@ -1,6 +1,6 @@
 module DigYukko
   class ClearEffect
-    POSITION = { x: 100, y: Config['window.height'] / 2 }
+    POSITION = { x: 350, y: 100 }
     OPTIONS = {
       color: ::DXRuby::C_CYAN,
       edge: true,
