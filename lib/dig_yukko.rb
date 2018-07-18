@@ -5,17 +5,24 @@ module DigYukko
   require 'lib/config'
   require 'lib/auto_loader'
 
+  VERSION = '0.0.1-beta1'
+
   class << self
     def setup
       log(:debug, 'start setup')
       Config.load
       @logger = nil
       log(:info, 'start application')
+      ::DXRuby::Window.caption = caption
       ::DXRuby::Window.width = Config['window.width']
       ::DXRuby::Window.height = Config['window.height']
       ::DXRuby::Window.fps = 60
       ::DXRuby::Window.frameskip = false
       AutoLoader.run
+    end
+
+    def caption
+      [Config['title'], ' ver.', VERSION].join
     end
 
     def app_root

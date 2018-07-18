@@ -8,6 +8,7 @@ module DigYukko
     require 'yaml'
 
     DEFAULT_SETTINGS = {
+      title: 'DigYukko',
       log: {
         level:      :debug,
         shift_age:  3,
