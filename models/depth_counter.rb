@@ -13,6 +13,7 @@ module DigYukko
     def initialize
       @count = 1
       update_count_str
+      @stop = false
     end
 
     def update_count_str
@@ -20,6 +21,7 @@ module DigYukko
     end
 
     def count_up(val)
+      return if @stop
       @count += val
       update_count_str
     end
@@ -30,6 +32,10 @@ module DigYukko
                                     @count_str,
                                     FONT[:regular],
                                     OPTIONS)
+    end
+
+    def stop!
+      @stop = true
     end
   end
 end

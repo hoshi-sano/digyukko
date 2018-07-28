@@ -110,7 +110,7 @@ module DigYukko
       # TODO: 連続被弾しないように無敵時間をつくる
       if @life <= 0
         @life = 0
-        ActionManager.push_cut_in_effect(FailedEffect.new(self, @map))
+        ActionManager.failed
       end
     end
 

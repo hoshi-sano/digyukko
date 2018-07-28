@@ -16,6 +16,11 @@ module DigYukko
         @combo_counter.count_up
       end
 
+      def failed
+        @depth_counter.stop!
+        push_cut_in_effect(FailedEffect.new(@yukko, @map))
+      end
+
       def add_depth(val)
         @depth_counter.count_up(val)
       end
