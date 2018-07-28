@@ -1,7 +1,5 @@
 module DigYukko
   class BreakableBlock < Block
-    CODE = 0
-
     set_image load_image('breakable_block')
     set_score 10
     fragment(image)

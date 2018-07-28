@@ -120,25 +120,16 @@ module DigYukko
     def generate_field_objects
       line_length = Config['window.width'] / BreakableBlock.image.width
       DigYukko.log(:debug, "start generate_blocks, line_length: #{line_length}", self.class)
-      line_codes = generate_line_code(line_length)
+      lines = generate_lines(line_length)
 
-      # ブロックコードから各ブロックのインスタンスへ変換する
-      line_codes.map.with_index do |line_code, line_num|
-        line = line_code.map.with_index do |code, block_num|
-          case code
-          when BreakableBlock::CODE
-            BreakableBlock.new(self, block_num, line_num)
-          when UnbreakableBlock::CODE
-            UnbreakableBlock.new(self, block_num, line_num)
-          when WideSpreadBomb::CODE
-            WideSpreadBomb.new(self, block_num, line_num)
-          when LifeRecoverItem::CODE
-            LifeRecoverItem.new(self, block_num, line_num)
-          when ProjectileCostumeItem::CODE
-            ProjectileCostumeItem.new(self, block_num, line_num)
+      # ブロック/アイテムのクラスからインスタンスへ変換する
+      lines.map.with_index do |line, line_num|
+        line.map.with_index do |klass, block_num|
+          next if klass.nil?
+          klass.new(self, block_num, line_num).tap do |line_obj|
+            line_obj.target = @field
           end
         end
-        line.each { |b| b.target = @field if b }
       end
     end
 
@@ -166,30 +157,30 @@ module DigYukko
     end
 
     # 1ステージ分のブロックラインをブロックコード値で生成する
-    def generate_line_code(line_length)
-      line_codes = []
-      line_dat = generate_initial_line_code(line_length)
-      line_codes << line_dat[:line]
+    def generate_lines(line_length)
+      res = []
+      line_dat = generate_initial_line(line_length)
+      res << line_dat[:line]
       (DEPTH - 1).times do
         DigYukko.log(:debug, line_dat, self.class)
         line_dat =
-          generate_single_line_code(line_length, line_dat[:x_offset], line_dat[:b_length])
-        line_codes << line_dat[:line]
+          generate_single_line(line_length, line_dat[:x_offset], line_dat[:b_length])
+        res << line_dat[:line]
       end
-      line_codes
+      res
     end
 
-    # 一番最初のブロックコード値のブロックラインを固定で生成する
-    def generate_initial_line_code(length)
-      res = Array.new(SIDE_WALL_LENGTH, UnbreakableBlock::CODE)
-      res += Array.new(length - SIDE_WALL_LENGTH * 2, BreakableBlock::CODE)
-      res += Array.new(SIDE_WALL_LENGTH, UnbreakableBlock::CODE)
+    # 一番最初のブロックラインを固定で生成する
+    def generate_initial_line(length)
+      res = Array.new(SIDE_WALL_LENGTH, UnbreakableBlock)
+      res += Array.new(length - SIDE_WALL_LENGTH * 2, BreakableBlock)
+      res += Array.new(SIDE_WALL_LENGTH, UnbreakableBlock)
       { line: res, x_offset: SIDE_WALL_LENGTH - 1, b_length: length - SIDE_WALL_LENGTH * 2 }
     end
 
-    # 1行分のブロックラインをブロックコード値でランダム生成する
+    # 1行分のブロックラインをブロック/アイテム系のクラスの配列でランダム生成する
     # 直前の行の情報を元に進行不可なブロックラインを生成しないようにする
-    def generate_single_line_code(length, prev_offset, prev_length)
+    def generate_single_line(length, prev_offset, prev_length)
       new_offset, new_length = nil, nil
       while invalid_offset_and_length?(length, new_offset, new_length,
                                        prev_offset, prev_length)
@@ -197,27 +188,27 @@ module DigYukko
         new_length = random(length - SIDE_WALL_LENGTH - new_offset) + 1
       end
 
-      res = Array.new(new_offset, UnbreakableBlock::CODE)
+      res = Array.new(new_offset, UnbreakableBlock)
       breakable_end = new_offset + new_length
       while res.length < length
-        code = (res.length < breakable_end) ? breakable_code : UnbreakableBlock::CODE
-        res << code
+        klass = (res.length < breakable_end) ? breakable_object_class : UnbreakableBlock
+        res << klass
       end
       { line: res, x_offset: new_offset, b_length: new_length }
     end
 
-    # 破壊可能なブロック、爆弾、アイテムのいずれかのコードを返す
+    # 破壊可能なブロック、爆弾、アイテムのいずれかのクラスを返す
     # TODO: いい感じの確率で返すようにする
-    def breakable_code
+    def breakable_object_class
       val = random(100)
       if val > 98
-        ProjectileCostumeItem::CODE
+        ProjectileCostumeItem
       elsif val > 95
-        LifeRecoverItem::CODE
+        LifeRecoverItem
       elsif val > 85
-        WideSpreadBomb::CODE
+        WideSpreadBomb
       else
-        BreakableBlock::CODE
+        BreakableBlock
       end
     end
 

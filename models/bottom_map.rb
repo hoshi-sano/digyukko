@@ -10,24 +10,24 @@ module DigYukko
     end
 
     # ランダムではなく固定マップを生成する
-    def generate_line_code(line_length)
-      line_codes = []
+    def generate_lines(line_length)
+      res = []
       (DEPTH - 12).times do
-        line = Array.new(3, UnbreakableBlock::CODE)
-        line += Array.new(line_length - 6, FieldObject::EMPTY_CODE)
-        line += Array.new(3, UnbreakableBlock::CODE)
-        line_codes << line
+        line = Array.new(3, UnbreakableBlock)
+        line += Array.new(line_length - 6, nil)
+        line += Array.new(3, UnbreakableBlock)
+        res << line
       end
       2.times do
-        line = Array.new(3, UnbreakableBlock::CODE)
-        line += Array.new(line_length - 11, FieldObject::EMPTY_CODE)
-        line += Array.new(2, UnbreakableBlock::CODE)
-        line += Array.new(3, FieldObject::EMPTY_CODE)
-        line += Array.new(3, UnbreakableBlock::CODE)
-        line_codes << line
+        line = Array.new(3, UnbreakableBlock)
+        line += Array.new(line_length - 11, nil)
+        line += Array.new(2, UnbreakableBlock)
+        line += Array.new(3, nil)
+        line += Array.new(3, UnbreakableBlock)
+        res << line
       end
-      10.times { line_codes << Array.new(line_length, 1) }
-      line_codes
+      10.times { res << Array.new(line_length, UnbreakableBlock) }
+      res
     end
   end
 end

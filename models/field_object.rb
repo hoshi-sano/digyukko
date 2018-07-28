@@ -3,9 +3,6 @@ module DigYukko
   class FieldObject < ::DXRuby::Sprite
     include HelperMethods
 
-    # オブジェクトが無いことを表現するコード
-    EMPTY_CODE = 9
-
     class << self
       def set_image(image)
         @image = image
