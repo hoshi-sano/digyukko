@@ -47,6 +47,8 @@ module DigYukko
 
     def initialize(map, x, y)
       @map = map
+      @line_num = x
+      @block_num = y
       image = self.class.image
       # FieldObjectのサイズ基準はBreakableBlock
       super(x * BreakableBlock.image.width,

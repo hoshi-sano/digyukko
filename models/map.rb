@@ -1,6 +1,6 @@
 module DigYukko
   class Map
-    attr_reader :blocks, :field, :field_objects, :last_block, :items
+    attr_reader :blocks, :field, :field_objects, :last_block, :items, :object_generator
     attr_accessor :yukko
 
     class BlockChecker < ::DXRuby::Sprite
@@ -31,7 +31,8 @@ module DigYukko
     BLOCK_CHECKER =
       BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT / 2))
 
-    def initialize
+    def initialize(yukko)
+      @yukko = yukko
       @field = ::DXRuby::RenderTarget
                .new(Config['window.width'],
                     Config['window.height'] + BreakableBlock.image.width * DEPTH)
@@ -39,12 +40,14 @@ module DigYukko
       @field_x = 0
       @field_y = 0
       @shake_x = 0
+      @object_generator = MapObjectGenerator.new(@yukko)
       @field_objects = generate_field_objects
       @blocks = @field_objects.flatten.compact.select(&:block?)
       @last_block = @blocks.compact.sort { |b| b.foot_y }.first
       @items = @field_objects.flatten.compact.select(&:item?)
       @fragments = []
       @effects = []
+      @yukko.map = self
     end
 
     def draw
@@ -114,6 +117,16 @@ module DigYukko
       ary = Array(effects)
       ary.each { |b| b.target = @field }
       @effects = @effects + ary
+    end
+
+    def put_field_object(obj)
+      obj.target = @field
+      @field_objects << obj
+      if obj.block?
+        @blocks << obj
+      elsif obj.item?
+        @items << obj
+      end
     end
 
     # ステージのオブジェクトをランダム生成する
@@ -191,25 +204,13 @@ module DigYukko
       res = Array.new(new_offset, UnbreakableBlock)
       breakable_end = new_offset + new_length
       while res.length < length
-        klass = (res.length < breakable_end) ? breakable_object_class : UnbreakableBlock
-        res << klass
+        if res.length < breakable_end
+          res << @object_generator.breakable_object_class
+        else
+          res << UnbreakableBlock
+        end
       end
       { line: res, x_offset: new_offset, b_length: new_length }
-    end
-
-    # 破壊可能なブロック、爆弾、アイテムのいずれかのクラスを返す
-    # TODO: いい感じの確率で返すようにする
-    def breakable_object_class
-      val = random(100)
-      if val > 98
-        ProjectileCostumeItem
-      elsif val > 95
-        LifeRecoverItem
-      elsif val > 85
-        WideSpreadBomb
-      else
-        BreakableBlock
-      end
     end
 
     def invalid_offset_and_length?(block_length,
