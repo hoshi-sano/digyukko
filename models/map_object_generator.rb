@@ -3,11 +3,19 @@ module DigYukko
     # ランダムマップ生成時の破壊可能オブジェクト排出率管理用クラス
     class BreakableObjectTable < Hash
       DEFAULT_SCORE = [
+        [BreakableBlock,        80],
         [ProjectileCostumeItem, 2],
         [ItemBox,               2],
         [LifeRecoverItem,       2],
-        [WideSpreadBomb,        8],
-        [BreakableBlock,        80],
+        [WideSpreadBomb1,       8],
+        [WideSpreadBomb2,       0],
+        [WideSpreadBomb3,       0],
+        [HorizontalBomb1,       0],
+        [HorizontalBomb2,       0],
+        [HorizontalBomb3,       0],
+        [VerticalBomb1,         0],
+        [VerticalBomb2,         0],
+        [VerticalBomb3,         0],
       ]
 
       def initialize
