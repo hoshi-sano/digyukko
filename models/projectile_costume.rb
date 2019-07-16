@@ -12,9 +12,13 @@ module DigYukko
     end
 
     class Weapon < ::DigYukko::Costume::Weapon
+      include HelperMethods
+
       X_IMAGE = Image.new(1, 1, ::DXRuby::C_BLUE)
       Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
-      PROJECTILE_IMAGE = Image.new(10, 5, ::DXRuby::C_YELLOW)
+      IMAGE_SPLIT_X = 4
+      IMAGE_SPLIT_Y = 2
+      PROJECTILE_IMAGES = load_image_tiles('projectile', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
 
       def initialize(yukko)
         super
@@ -44,18 +48,31 @@ module DigYukko
 
       # 射出物
       class Projectile < ::DXRuby::Sprite
-        SPEED = 6
+        SPEED = 5
 
         def initialize(weapon)
           yukko = weapon.yukko
-          super(yukko.mid_x, yukko.mid_y, ProjectileCostume::Weapon::PROJECTILE_IMAGE)
+          super(yukko.mid_x,
+                yukko.mid_y - (ProjectileCostume::Weapon::PROJECTILE_IMAGES.first.height / 2),
+                ProjectileCostume::Weapon::PROJECTILE_IMAGES.first)
           @direction = yukko.x_dir
+          @image_y = Yukko::DIR.values.index(yukko.x_dir)
+          @image_x_frame = 0
           self.target = weapon.target
         end
 
         def update
+          self.image = current_image
+          @image_x_frame += 0.5
+          @image_x_frame = @image_x_frame % ProjectileCostume::Weapon::IMAGE_SPLIT_X
           self.x = self.x + (self.class::SPEED * @direction)
           vanish if self.x < 0 || self.x > Config['window.width']
+        end
+
+        def current_image
+          ProjectileCostume::Weapon::PROJECTILE_IMAGES[
+            @image_y * ProjectileCostume::Weapon::IMAGE_SPLIT_X + @image_x_frame
+          ]
         end
 
         def shot(obj)
