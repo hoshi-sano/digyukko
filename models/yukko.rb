@@ -6,6 +6,7 @@ module DigYukko
     HEIGHT = DefaultCostume::IMAGES.first.height
     ANIMATION_SPEED = 0.25
     X_MOVE_UNIT = 5
+    TEMPORARY_INVINCIBLE_COUNT_MAX = 120
     DIR = {
       left: -1,
       right: 1,
@@ -45,6 +46,7 @@ module DigYukko
       @y_speed = 0
       # 滞空時間(frame)
       @aerial_time = 0
+      @temporary_invincible_count = 0
     end
 
     def map=(map)
@@ -105,13 +107,23 @@ module DigYukko
     end
 
     def damage(val)
+      return if invincible?
       @life -= val
+      @temporary_invincible_count = TEMPORARY_INVINCIBLE_COUNT_MAX
       @map.shake!
       # TODO: 連続被弾しないように無敵時間をつくる
       if @life <= 0
         @life = 0
         ActionManager.failed
       end
+    end
+
+    def invincible?
+      @temporary_invincible_count > 0
+    end
+
+    def update_invincible_count
+      @temporary_invincible_count -= 1 if invincible?
     end
 
     def recover(val)
@@ -225,6 +237,7 @@ module DigYukko
       @costume.update_weapon
       position_compensate
       update_attacking_time
+      update_invincible_count
       check_item_collision
     end
 
