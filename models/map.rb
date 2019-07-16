@@ -46,14 +46,12 @@ module DigYukko
       @last_block = @blocks.compact.sort { |b| b.foot_y }.first
       @items = @field_objects.flatten.compact.select(&:item?)
       @fragments = []
-      @effects = []
       @yukko.map = self
     end
 
     def draw
       @field.draw(0, 0, @field_bg, -1)
       ::DXRuby::Sprite.draw(@field_objects)
-      ::DXRuby::Sprite.draw(@effects)
       ::DXRuby::Sprite.draw(@fragments)
       ::DXRuby::Window.draw(@field_x, @field_y, @field)
     end
@@ -70,11 +68,9 @@ module DigYukko
       shake_field
 
       ::DXRuby::Sprite.update(@field_objects)
-      ::DXRuby::Sprite.update(@effects)
       ::DXRuby::Sprite.update(@fragments)
       @fragments.each { |f| f.vanish if f.y > Config['window.height'] - @field_y }
       @fragments.delete_if { |f| f.vanished? }
-      @effects.delete_if { |f| f.vanished? }
     end
 
     def random(max)
@@ -111,12 +107,6 @@ module DigYukko
     def push_fragments(ary)
       ary.each { |b| b.target = @field }
       @fragments = @fragments + ary
-    end
-
-    def push_effects(effects)
-      ary = Array(effects)
-      ary.each { |b| b.target = @field }
-      @effects = @effects + ary
     end
 
     def put_field_object(obj)

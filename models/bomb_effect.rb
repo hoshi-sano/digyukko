@@ -8,19 +8,36 @@ module DigYukko
       end
     end
 
-    def initialize(x, y)
-      @count = 0
+    def initialize(x, y, power, delay = 0)
+      @power = power
+      @delay = delay * (FRAME_NUM / 3)
+      @count = -1
       super(x, y, IMAGES[@count])
+      self.z = 300
+      self.visible = @delay.zero?
+      self.collision_enable = @delay.zero?
       self.vanish if finished?
     end
 
     def update
+      @delay -= 1
+      return if @delay > 0
+      self.visible = true
+      self.collision_enable = true
       @count += 1
       self.image = IMAGES[@count]
     end
 
     def finished?
       @count > FRAME_NUM
+    end
+
+    def shot(obj)
+      if obj.is_a?(Yukko)
+        obj.damage(@power)
+      else
+        obj.break
+      end
     end
   end
 end

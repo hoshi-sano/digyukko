@@ -30,9 +30,13 @@ module DigYukko
         @range_obj.update
         explosion! if @range_obj.limit?
       elsif @explosion
-        # 爆発エフェクトが完了したらすべての処理を終了する
+        ::DXRuby::Sprite.update(@bomb_effects)
+        @bomb_effects.delete_if(&:vanished?)
+        ::DXRuby::Sprite.check(@bomb_effects, @map.field_objects)
+        ::DXRuby::Sprite.check(@bomb_effects, @map.yukko)
+        # 最も遠い爆発エフェクトが完了したらすべての処理を終了する
         # 爆発エフェクトのupdateはmap側で行われるのでここでは完了チェックのみ
-        if @bomb_effect.finished?
+        if @farthest_bomb_effect.finished?
           @explosion = false
           vanish
         end
@@ -41,8 +45,8 @@ module DigYukko
 
     def draw
       super
-      @range_obj.draw if @ignition
-      @bomb_effect.draw if @explosion
+      @range_obj.draw if @ignition || @explosion
+      ::DXRuby::Sprite.draw(@bomb_effects) if @explosion
     end
 
     def x_range
@@ -64,25 +68,33 @@ module DigYukko
     end
 
     def generate_bomb_effects
-      res = []
+      @bomb_effects = []
+      farthest = 0
       y_range.each do |dy|
         x_range.each do |dx|
-          res << BombEffect.new(self.x + dx * self.width, self.y + dy * self.height)
+          effect_x = self.x + dx * self.width
+          effect_y = self.y + dy * self.height
+          delay = [dx, dy].map(&:abs).max
+          effect = BombEffect.new(effect_x, effect_y, power, delay)
+          effect.target = self.target
+          @bomb_effects << effect
+
+          @farthest_bomb_effect ||= effect
+          if delay > farthest
+            farthest = delay
+            @farthest_bomb_effect = effect
+          end
         end
       end
-      @bomb_effect = res[res.size / 2]
-      res
+      @bomb_effects
     end
 
     def explosion!
       @ignition = false
       @explosion = true
       self.visible = false
-      @map.push_effects(generate_bomb_effects)
+      generate_bomb_effects
       self.collision_enable = false
-
-      ::DXRuby::Sprite.check(@range_obj, @map.field_objects)
-      ::DXRuby::Sprite.check(@range_obj, @map.yukko)
     end
   end
 end

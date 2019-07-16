@@ -28,13 +28,5 @@ module DigYukko
     def limit?
       self.alpha >= LIMIT
     end
-
-    def shot(obj)
-      if obj.is_a?(Yukko)
-        obj.damage(@bomb.power)
-      else
-        obj.break
-      end
-    end
   end
 end
