@@ -49,12 +49,13 @@ module DigYukko
       # 射出物
       class Projectile < ::DXRuby::Sprite
         SPEED = 5
+        IMAGE_SAMPLE = ProjectileCostume::Weapon::PROJECTILE_IMAGES.first
 
         def initialize(weapon)
           yukko = weapon.yukko
-          super(yukko.mid_x,
-                yukko.mid_y - (ProjectileCostume::Weapon::PROJECTILE_IMAGES.first.height / 2),
-                ProjectileCostume::Weapon::PROJECTILE_IMAGES.first)
+          super(yukko.x + (yukko.x_dir * IMAGE_SAMPLE.width / 2),
+                yukko.mid_y - (IMAGE_SAMPLE.height / 2),
+                IMAGE_SAMPLE)
           @direction = yukko.x_dir
           @image_y = Yukko::DIR.values.index(yukko.x_dir)
           @image_x_frame = 0
