@@ -111,7 +111,6 @@ module DigYukko
       @life -= val
       @temporary_invincible_count = TEMPORARY_INVINCIBLE_COUNT_MAX
       @map.shake!
-      # TODO: 連続被弾しないように無敵時間をつくる
       if @life <= 0
         @life = 0
         ActionManager.failed
