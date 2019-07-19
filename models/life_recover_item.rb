@@ -1,17 +1,23 @@
 module DigYukko
   class LifeRecoverItem < Item
-    # TODO: 専用の画像を用意する
-    set_image ::DXRuby::Image.new(32, 32).tap { |img|
-                img.circle_fill(16, 16, 16, ::DXRuby::C_GREEN)
-              }
-    set_score 10
-    set_power 25
-    fragment(image)
-
     def effect(yukko)
       SE.play(:got_item)
       yukko.recover(power)
       vanish
     end
+  end
+
+  class LowRecoverItem < LifeRecoverItem
+    set_image load_image('recover_item')
+    set_score 10
+    set_power 25
+    fragment(image)
+  end
+
+  class FullRecoverItem < LifeRecoverItem
+    set_image load_image('full_recover_item')
+    set_score 100
+    set_power 100
+    fragment(image)
   end
 end

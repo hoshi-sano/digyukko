@@ -6,7 +6,8 @@ module DigYukko
         [BreakableBlock,        80],
         [ProjectileCostumeItem, 2],
         [ItemBox,               2],
-        [LifeRecoverItem,       2],
+        [LowRecoverItem,        2],
+        [FullRecoverItem,       0],
         [WideSpreadBomb1,       8],
         [WideSpreadBomb2,       0],
         [WideSpreadBomb3,       0],
@@ -59,7 +60,8 @@ module DigYukko
     class ItemTable < BreakableObjectTable
       DEFAULT_SCORE = [
         [ProjectileCostumeItem, 2],
-        [LifeRecoverItem,       2],
+        [LowRecoverItem,        2],
+        [FullRecoverItem,       0],
       ]
     end
 
