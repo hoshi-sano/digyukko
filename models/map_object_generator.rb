@@ -4,6 +4,7 @@ module DigYukko
     class BreakableObjectTable < Hash
       DEFAULT_SCORE = [
         [BreakableBlock,        80],
+        [HardBreakableBlock,    0],
         [ProjectileCostumeItem, 2],
         [ItemBox,               2],
         [LowRecoverItem,        2],
