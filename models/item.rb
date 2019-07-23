@@ -1,7 +1,7 @@
 module DigYukko
   # アイテムの基本クラス
   class Item < FieldObject
-    def temporary_unbreakable(f = 10)
+    def temporary_unbreakable(f = 14)
       @temp_unbreakable ||= f
     end
 

@@ -4,7 +4,7 @@ module DigYukko
     set_score 10
     fragment(image)
 
-    def temporary_unbreakable(f = 12)
+    def temporary_unbreakable(f = 14)
       @temp_unbreakable ||= f
     end
 
