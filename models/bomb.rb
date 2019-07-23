@@ -23,20 +23,25 @@ module DigYukko
       img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_RED)
     }
 
+    EMPTY_HASH = {}
+
+    attr_reader :map
+
     def update
       if @ignition
-        # 着火中なら爆発範囲オブジェクトのupdateを行う
-        # 爆発範囲オブジェクトのカウントがリミットに達したら爆発
-        @range_obj.update
-        explosion! if @range_obj.limit?
+        # 爆発エフェクトの警告カウントがリミットに達したら爆発
+        ::DXRuby::Sprite.update(@bomb_effects)
+        # explosion! if bomb_effect(0, 0).limit?
+        if bomb_effect(0, 0).limit?
+          @bomb_effects.each(&:wait_ignition!)
+          explosion!
+        end
       elsif @explosion
         ::DXRuby::Sprite.update(@bomb_effects)
         @bomb_effects.delete_if(&:vanished?)
         ::DXRuby::Sprite.check(@bomb_effects, @map.field_objects)
         ::DXRuby::Sprite.check(@bomb_effects, @map.yukko)
-        # 最も遠い爆発エフェクトが完了したらすべての処理を終了する
-        # 爆発エフェクトのupdateはmap側で行われるのでここでは完了チェックのみ
-        if @farthest_bomb_effect.finished?
+        if @bomb_effects.empty?
           @explosion = false
           vanish
         end
@@ -45,8 +50,8 @@ module DigYukko
 
     def draw
       super
-      @range_obj.draw if @ignition || @explosion
-      ::DXRuby::Sprite.draw(@bomb_effects) if @explosion
+      # TODO: 描画も爆発処理と同じく伝搬する形式で実行されるようにする
+      ::DXRuby::Sprite.draw(@bomb_effects) if @ignition || @explosion
     end
 
     def x_range
@@ -63,38 +68,47 @@ module DigYukko
       ActionManager.combo
       ActionManager.add_score(self)
       @ignition = true
-      @range_obj = BombRange.new(self, x_range.to_a.size, y_range.to_a.size)
-      @range_obj.target = self.target
+      generate_bomb_effects
+    end
+
+    def set_bomb_effect(effect_x, effect_y, distance = 0)
+      @bomb_effects_window ||= {}
+      @bomb_effects_window[effect_x] ||= {}
+
+      return nil unless (x_range.include?(effect_x) && y_range.include?(effect_y))
+      return nil if bomb_effect(effect_x, effect_y)
+
+      effect = BombEffect.new(self, effect_x, effect_y, distance)
+      @bomb_effects_window[effect_x][effect_y] = effect
+
+      @bomb_effects ||= []
+      @bomb_effects << effect
+
+      effect
+    end
+
+    def bomb_effect(effect_x, effect_y)
+      (@bomb_effects_window[effect_x] || EMPTY_HASH)[effect_y]
     end
 
     def generate_bomb_effects
-      @bomb_effects = []
-      farthest = 0
-      y_range.each do |dy|
-        x_range.each do |dx|
-          effect_x = self.x + dx * self.width
-          effect_y = self.y + dy * self.height
-          delay = [dx, dy].map(&:abs).max
-          effect = BombEffect.new(effect_x, effect_y, power, delay)
-          effect.target = self.target
-          @bomb_effects << effect
-
-          @farthest_bomb_effect ||= effect
-          if delay > farthest
-            farthest = delay
-            @farthest_bomb_effect = effect
-          end
+      new_effects = [set_bomb_effect(0, 0)]
+      while(new_effects.any?)
+        effects = []
+        new_effects.each do |effect|
+          effects << effect.generate_next_effects
         end
+        new_effects = effects.flatten
       end
-      @bomb_effects
     end
 
     def explosion!
       @ignition = false
       @explosion = true
       self.visible = false
-      generate_bomb_effects
       self.collision_enable = false
+      # 最初に中心の爆発エフェクトのみを発生させ遠くに向かって伝搬させる
+      bomb_effect(0, 0).ignition!
     end
   end
 end
