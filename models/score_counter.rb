@@ -7,7 +7,8 @@ module DigYukko
       edge: true,
       edge_color: ::DXRuby::C_BLACK,
     }
-    COUNT_UPDATE_UNIT = 4
+    COUNT_UPDATE_RATIO = 30
+    COUNT_UPDATE_MIN_UNIT = 5
 
     attr_accessor :count
 
@@ -30,13 +31,23 @@ module DigYukko
     # 徐々に加算されるのを表現する
     def update
       return if @reserved_count.zero?
-      @reserved_count -= COUNT_UPDATE_UNIT
-      @count += COUNT_UPDATE_UNIT
+      unit = calc_count_update_unit
+      @reserved_count -= unit
+      @count += unit
       update_count_str
       return if @reserved_count >= 0
       @count += @reserved_count
       @reserved_count = 0
       update_count_str
+    end
+
+    # 徐々に加算されるスコアの値を返す
+    # @reserved_count(未加算のスコア)が大きいほど大きい値を返す
+    def calc_count_update_unit
+      return @reserved_count if @reserved_count <= COUNT_UPDATE_MIN_UNIT
+      res = @reserved_count / COUNT_UPDATE_RATIO
+      res = COUNT_UPDATE_MIN_UNIT if res < COUNT_UPDATE_MIN_UNIT
+      res
     end
 
     def update_count_str
