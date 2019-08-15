@@ -1,6 +1,6 @@
 module DigYukko
   class ComboCounter
-    attr_reader :count
+    attr_reader :count, :score
 
     POSITION = { x: Config['window.width'] - 80, y: 60 }
     DISPLAY_THRESHOLD = 2
@@ -27,6 +27,7 @@ module DigYukko
       edge: true,
       edge_color: ::DXRuby::C_BLACK,
     }
+    SCORE_UP_UNIT = 50
 
 
     def initialize
@@ -39,6 +40,7 @@ module DigYukko
       @max_combo = 0
       update_count_str
       @max_combo_str = sprintf(MAX_COMBO_STR, @max_combo)
+      @score = 0
     end
 
     def update_count_str
@@ -52,6 +54,7 @@ module DigYukko
     def count_up
       @stop = false
       @count += 1
+      @score += @count if (@count % SCORE_UP_UNIT).zero?
       @timer = COMBO_TIMER
       @scale = 0.2
       update_count_str

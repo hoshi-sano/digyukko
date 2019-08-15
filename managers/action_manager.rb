@@ -74,9 +74,14 @@ module DigYukko
         end
       end
 
+      def progress_score
+        (@depth_counter.count / 3).to_i + @combo_counter.score
+      end
+
       def clear?
-        Config['clear_condition.depth'] <= @depth_counter.count &&
-          Config['clear_condition.score'] <= @score_counter.score
+        ps = progress_score
+        DigYukko.log(:debug, "check clear condition: #{Config['clear_condition']} <= #{ps}")
+        Config['clear_condition'] <= ps
       end
 
       def result
