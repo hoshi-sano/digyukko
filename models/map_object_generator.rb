@@ -1,5 +1,7 @@
 module DigYukko
   class MapObjectGenerator
+    attr_reader :breakable_object_table, :item_table
+
     # ランダムマップ生成時の破壊可能オブジェクト排出率管理用クラス
     class BreakableObjectTable < Hash
       DEFAULT_SCORE = [
@@ -23,17 +25,56 @@ module DigYukko
       def initialize
         super
         init_score
-      end
-
-      def []=(key, val)
-        @max_score = nil
-        super
         reset_stock
       end
 
       # オブジェクトの排出スコアを初期化する
       def init_score
+        @max_score = nil
         self.class::DEFAULT_SCORE.each { |obj, score| self[obj] = score }
+      end
+
+      # 排出スコアを表現したハッシュを足し込む
+      # スコア(数値)ではなくシンボルを指定していた場合はその内容に応じた操作を行う
+      def add(hash)
+        @max_score = nil
+        hash.each do |key, value_or_operator|
+          if value_or_operator.is_a?(Integer)
+            calculate(key, :+, value_or_operator)
+          else
+            calculate(key, value_or_operator)
+          end
+        end
+        reset_stock
+      end
+
+      # 排出スコアを一時的に足し込む
+      # ブロック内でのみ足しこんだ結果のスコアが有効となる
+      def temp_add(hash, &block)
+        temp = self.dup
+
+        add(hash)
+        res = yield(self)
+
+        self.clear
+        add(temp)
+
+        res
+      end
+
+      def calculate(key, operator, value = nil)
+        case operator
+        when :+
+          if key?(key)
+            self[key] += value
+          else
+            self[key] = value
+          end
+        when :zero
+          self[key] = 0
+        else
+          raise "invalid operator: calculate(#{key}, #{operator}, #{value})"
+        end
       end
 
       def draw(val)
