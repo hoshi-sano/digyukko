@@ -299,5 +299,16 @@ module DigYukko
       return unless obj.item?
       obj.effect(self)
     end
+
+    # yukkoの状態を考慮したアイテム排出率のハッシュを返す
+    # * lifeが少ないほど回復アイテムの排出率上昇
+    # * 現在のコスチュームと同じコスチュームアイテムは排出しない
+    # * 現在のコスチュームの上位コスチュームアイテムを排出する
+    def current_item_table
+      {
+        LowRecoverItem => ((@max_life - @life) / 10) / 3,
+        FullRecoverItem => (@life <= 25) ? 1 : 0,
+      }.merge(@costume.item_table)
+    end
   end
 end

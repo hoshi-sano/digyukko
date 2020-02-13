@@ -79,5 +79,9 @@ module DigYukko
     def update_weapon
       # TODO: 武器の見た目の更新
     end
+
+    def item_table
+      raise NotImplementedError
+    end
   end
 end

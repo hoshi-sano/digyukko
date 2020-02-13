@@ -11,6 +11,13 @@ module DigYukko
       @weapon.update_projectiles
     end
 
+    def item_table
+      {
+        ProjectileCostumeItem => :zero,
+        # TODO: 上位コスチューム
+      }
+    end
+
     class Weapon < ::DigYukko::Costume::Weapon
       include HelperMethods
 

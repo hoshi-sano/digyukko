@@ -113,10 +113,18 @@ module DigYukko
       @item_table = ItemTable.new
     end
 
+    # ゲームの進行度に応じてオブジェクト排出テーブルを変更する
+    # 進行しているほどハイリスク・ハイリターンな排出率となる
+    def reset_by_progress(score)
+      # TODO
+    end
+
     # ItemBoxなどから利用するメソッド
-    # TODO: yukkoの状態やスコア等を考慮しつつ、ややランダムにアイテムのクラスを返す
+    # yukkoの状態を考慮しつつ、ややランダムにアイテムのクラスを返す
     def generate_item
-      @item_table.draw(random(@item_table.max_score))
+      @item_table.temp_add(@yukko.current_item_table) do |table|
+        table.draw(random(@item_table.max_score))
+      end
     end
 
     # 破壊可能なブロック、爆弾、アイテムのいずれかのクラスを返す
