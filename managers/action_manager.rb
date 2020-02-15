@@ -3,7 +3,7 @@ module DigYukko
     class << self
       def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0, map = nil)
         @yukko = yukko || Yukko.new
-        @map = map || Map.new(@yukko)
+        @map = map || Map.new(@yukko, score)
         @combo_counter = combo_counter || ComboCounter.new
         @depth_counter = depth_counter || DepthCounter.new
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter, score)

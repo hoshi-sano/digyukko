@@ -31,7 +31,7 @@ module DigYukko
     BLOCK_CHECKER =
       BlockChecker.new(0, 0, ::DXRuby::Image.new(Yukko::X_MOVE_UNIT, Yukko::HEIGHT / 2))
 
-    def initialize(yukko)
+    def initialize(yukko, score)
       @yukko = yukko
       @field = ::DXRuby::RenderTarget
                .new(Config['window.width'],
@@ -40,7 +40,7 @@ module DigYukko
       @field_x = 0
       @field_y = 0
       @shake_x = 0
-      @object_generator = MapObjectGenerator.new(@yukko)
+      @object_generator = MapObjectGenerator.new(@yukko, score)
       @field_objects = generate_field_objects
       @blocks = @field_objects.flatten.compact.select(&:block?)
       @last_block = @blocks.compact.sort { |b| b.foot_y }.first

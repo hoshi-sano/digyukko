@@ -7,9 +7,9 @@ module DigYukko
       DEFAULT_SCORE = [
         [BreakableBlock,        80],
         [HardBreakableBlock,    0],
-        [ProjectileCostumeItem, 2],
+        [ProjectileCostumeItem, 0],
         [ItemBox,               2],
-        [LowRecoverItem,        2],
+        [LowRecoverItem,        1],
         [FullRecoverItem,       0],
         [WideSpreadBomb1,       8],
         [WideSpreadBomb2,       0],
@@ -107,16 +107,18 @@ module DigYukko
       ]
     end
 
-    def initialize(yukko)
+    def initialize(yukko, score)
       @yukko = yukko
       @breakable_object_table = BreakableObjectTable.new
+      reset_by_progress(score)
       @item_table = ItemTable.new
     end
 
     # ゲームの進行度に応じてオブジェクト排出テーブルを変更する
     # 進行しているほどハイリスク・ハイリターンな排出率となる
     def reset_by_progress(score)
-      # TODO
+      @breakable_object_table.init_score
+      @breakable_object_table.add(MapObjectTableGenerator.fetch(score))
     end
 
     # ItemBoxなどから利用するメソッド
