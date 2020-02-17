@@ -2,6 +2,7 @@ module DigYukko
   module ActionManager
     class << self
       def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0, map = nil)
+        LevelManager.init if yukko.nil?
         @yukko = yukko || Yukko.new
         @map = map || Map.new(@yukko, score)
         @combo_counter = combo_counter || ComboCounter.new

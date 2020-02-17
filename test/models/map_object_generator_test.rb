@@ -3,6 +3,10 @@ require_relative '../setup'
 
 module DigYukko
   class MapObjectGeneratorTest < Test::Unit::TestCase
+    def setup
+      LevelManager.init
+    end
+
     test 'assert default score' do
       generator = MapObjectGenerator.new(Yukko.new, 0)
       assert { 80 == generator.breakable_object_table[BreakableBlock] }

@@ -118,7 +118,7 @@ module DigYukko
     # 進行しているほどハイリスク・ハイリターンな排出率となる
     def reset_by_progress(score)
       @breakable_object_table.init_score
-      @breakable_object_table.add(MapObjectTableGenerator.fetch(score))
+      @breakable_object_table.add(MapObjectTableManager.fetch(score))
     end
 
     # ItemBoxなどから利用するメソッド
