@@ -3,7 +3,9 @@ module DigYukko
     manager_module ActionManager
 
     def initialize(*args)
-      args << BottomMap.new(args[0])
+      yukko = args[0]
+      score = args[-1]
+      args << BottomMap.new(yukko, score)
       super(*args)
     end
   end

@@ -1,8 +1,8 @@
 module DigYukko
   # 最奥部のマップを表現するクラス
   class BottomMap < Map
-    def initialize(yukko)
-      super
+    def initialize(yukko, score)
+      super(yukko, score)
       clear_item = ClearItem.new(self, 16, 16)
       clear_item.target = @field
       @field_objects << clear_item
