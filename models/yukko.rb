@@ -12,7 +12,7 @@ module DigYukko
       right: 1,
     }
 
-    attr_reader :x_dir, :max_life, :life, :animation_frame
+    attr_reader :x_dir, :max_life, :life, :animation_frame, :extra_power
 
     # 足の衝突判定用クラス
     class FootCollision < ::DXRuby::Sprite
@@ -38,6 +38,7 @@ module DigYukko
       @costume = DefaultCostume.new(self)
       @max_life = 100
       @life = 100
+      @extra_power = 0
       @x_dir = DIR[:right]
       @animation_frame = 0
       super(Config['window.width'] / 2, 0, @costume.current_image)
@@ -59,6 +60,7 @@ module DigYukko
     def costume=(new_costume)
       return if @costume.is_a?(new_costume)
       ActionManager.push_cut_in_effect(CostumeChangeEffect.new(self, new_costume))
+      # TODO: ActionManager.change_costume
       @costume = new_costume.new(self)
     end
 
@@ -309,6 +311,11 @@ module DigYukko
         LowRecoverItem => ((@max_life - @life) / 10) / 3,
         FullRecoverItem => (@life <= 25) ? 1 : 0,
       }.merge(@costume.item_table)
+    end
+
+    def max_extra_power
+      # TODO: 現在のコスチュームから返す
+      100
     end
   end
 end

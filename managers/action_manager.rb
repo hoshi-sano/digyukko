@@ -9,11 +9,13 @@ module DigYukko
         @depth_counter = depth_counter || DepthCounter.new
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter, score)
         @life_counter = LifeCounter.new(@yukko)
+        @extra_power_counter = ExtraPowerCounter.new(@yukko)
         @cut_in_effects = []
       end
 
       def combo
         @combo_counter.count_up
+        @extra_power_counter.count_up(@combo_counter.count)
       end
 
       def failed
@@ -45,6 +47,7 @@ module DigYukko
         @combo_counter.update
         @score_counter.update
         @life_counter.update
+        @extra_power_counter.update
         @combo_counter.stop if @yukko.over_last_row?
         go_to_next_stage if @yukko.at_bottom?
       end
@@ -56,6 +59,7 @@ module DigYukko
         @depth_counter.draw
         @score_counter.draw
         @life_counter.draw
+        @extra_power_counter.draw
         @cut_in_effects.each(&:draw)
       end
 
