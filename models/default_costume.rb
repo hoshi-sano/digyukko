@@ -11,6 +11,11 @@ module DigYukko
       Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
     end
 
+    class ExtraWeapon < ::DigYukko::Costume::ExtraWeapon
+      X_IMAGE = Image.new(64, 64, ::DXRuby::C_BLUE)
+      Y_IMAGE = Image.new(64, 64, ::DXRuby::C_BLUE)
+    end
+
     def item_table
       {}
     end

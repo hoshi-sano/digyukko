@@ -1,15 +1,15 @@
 module DigYukko
   module ActionManager
     class << self
-      def init(yukko = nil, combo_counter = nil, depth_counter = nil, score = 0, map = nil)
+      def init(yukko = nil, combo_counter = nil, depth_counter = nil, extra_counter = nil, score = 0, map = nil)
         LevelManager.init if yukko.nil?
         @yukko = yukko || Yukko.new
         @map = map || Map.new(@yukko, score)
         @combo_counter = combo_counter || ComboCounter.new
         @depth_counter = depth_counter || DepthCounter.new
+        @extra_power_counter = extra_counter || ExtraPowerCounter.new(@yukko)
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter, score)
         @life_counter = LifeCounter.new(@yukko)
-        @extra_power_counter = ExtraPowerCounter.new(@yukko)
         @cut_in_effects = []
       end
 
@@ -43,6 +43,7 @@ module DigYukko
         end
         @yukko.update
         @yukko.check_attack(@map.field_objects)
+        @yukko.check_extra_skill(@map.field_objects)
         @map.update
         @combo_counter.update
         @score_counter.update
@@ -67,15 +68,19 @@ module DigYukko
         return if @cut_in_effects.any?
         @yukko.move(KEY.x)
         @yukko.jump if KEY.down?(KEY.jump)
-        @yukko.attack(KEY.x, KEY.y) if KEY.push?(KEY.attack)
+        if KEY.push?(KEY.attack)
+          @yukko.attack(KEY.x, KEY.y)
+        elsif KEY.push?(KEY.extra)
+          @yukko.extra_skill(KEY.x, KEY.y, @extra_power_counter)
+        end
         @yukko.nojump unless KEY.down?(KEY.jump)
       end
 
       def next_scene
         if clear?
-          FinishActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.score)
+          FinishActionScene.new(@yukko, @combo_counter, @depth_counter, @extra_power_counter, @score_counter.score)
         else
-          ActionScene.new(@yukko, @combo_counter, @depth_counter, @score_counter.score)
+          ActionScene.new(@yukko, @combo_counter, @depth_counter, @extra_power_counter, @score_counter.score)
         end
       end
 

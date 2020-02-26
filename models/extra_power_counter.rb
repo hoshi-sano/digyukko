@@ -23,12 +23,20 @@ module DigYukko
       adjust_scale
     end
 
+    def zero!
+      @count = 0
+    end
+
+    def skill_available?
+      @count >= @max
+    end
+
     def reset_max
       @max = @yukko.max_extra_power
     end
 
     def count_up(combo_count)
-      return if @count >= @max
+      return if skill_available?
       # TODO: いい感じの加算になるよう調整する
       @count += combo_count
       if @count > @max

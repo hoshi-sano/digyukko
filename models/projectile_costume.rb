@@ -9,6 +9,7 @@ module DigYukko
     def update_weapon
       super
       @weapon.update_projectiles
+      @extra_weapon.update_projectiles
     end
 
     def item_table
@@ -44,7 +45,7 @@ module DigYukko
       def enable(key_x, key_y)
         super
         if @projectiles.size < 3 && key_y.zero?
-          @projectiles << Projectile.new(self)
+          @projectiles << self.class::Projectile.new(self)
         end
       end
 
@@ -86,6 +87,14 @@ module DigYukko
         def shot(obj)
           obj.break
           vanish
+        end
+      end
+    end
+
+    class ExtraWeapon < ProjectileCostume::Weapon
+      class Projectile < ProjectileCostume::Weapon::Projectile
+        def shot(obj)
+          obj.break
         end
       end
     end

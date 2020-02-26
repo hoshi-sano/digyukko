@@ -54,7 +54,7 @@ module DigYukko
       @map = map
       @map.yukko = self
       self.y = 0
-      [self, @foot_collision, current_weapon].each { |s| s.target = @map.field }
+      [self, @foot_collision, current_weapon, current_extra_weapon].each { |s| s.target = @map.field }
     end
 
     def costume=(new_costume)
@@ -78,6 +78,7 @@ module DigYukko
       super
       @foot_collision.draw
       current_weapon.draw
+      current_extra_weapon.draw
     end
 
     def width
@@ -145,7 +146,7 @@ module DigYukko
 
     def move_left
       @x_dir = DIR[:left]
-      return if attacking? || self.x <= 0
+      return if attacking? || extra_skill_using? || self.x <= 0
       if block = @map.find_block(self.x, self.y + self.height / 4, -X_MOVE_UNIT)
         self.x = block.x + block.width
       else
@@ -155,7 +156,7 @@ module DigYukko
 
     def move_right
       @x_dir = DIR[:right]
-      return if attacking? || self.x >= (@map.field.width - self.width)
+      return if attacking? || extra_skill_using? || self.x >= (@map.field.width - self.width)
       if block = @map.find_block(self.x + width, self.y, X_MOVE_UNIT)
         self.x = block.x - width
       else
@@ -165,6 +166,10 @@ module DigYukko
 
     def current_weapon
       @costume.weapon
+    end
+
+    def current_extra_weapon
+      @costume.extra_weapon
     end
 
     # 攻撃アクションの処理
@@ -195,6 +200,38 @@ module DigYukko
     # 攻撃アクションの衝突判定
     def check_attack(objects)
       ::DXRuby::Sprite.check(current_weapon.check_target, objects)
+    end
+
+    # 特殊行動アクションの処理
+    def extra_skill(key_x, key_y, counter)
+      return unless counter.skill_available?
+      counter.zero!
+      current_extra_weapon.enable(key_x, key_y)
+      start_extra_skill_animation
+    end
+
+    def start_extra_skill_animation
+      @extra_skill_time = 0
+    end
+
+    def finish_extra_skill_animation
+      @extra_skill_time = nil
+      current_extra_weapon.disable
+    end
+
+    def update_extra_skill_time
+      return unless @extra_skill_time
+      @extra_skill_time += 1
+      finish_extra_skill_animation if @extra_skill_time > 5
+    end
+
+    def extra_skill_using?
+      !!@extra_skill_time
+    end
+
+    # 特殊行動アクションの衝突判定
+    def check_extra_skill(objects)
+      ::DXRuby::Sprite.check(current_extra_weapon.check_target, objects)
     end
 
     # ジャンプ処理
@@ -238,6 +275,7 @@ module DigYukko
       @costume.update_weapon
       position_compensate
       update_attacking_time
+      update_extra_skill_time
       update_invincible_count
       check_item_collision
     end

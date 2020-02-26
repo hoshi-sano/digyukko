@@ -85,6 +85,10 @@ module DigYukko
         @config.attack
       end
 
+      def extra
+        @config.extra
+      end
+
       def up
         [::DXRuby::K_UP, ::DXRuby::P_UP]
       end

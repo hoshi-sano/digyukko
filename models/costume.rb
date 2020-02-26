@@ -61,13 +61,16 @@ module DigYukko
       end
     end
 
-    attr_reader :width, :height, :weapon
+    class ExtraWeapon < Weapon; end
+
+    attr_reader :width, :height, :weapon, :extra_weapon
 
     def initialize(yukko)
       @yukko = yukko
       @width = self.class::IMAGES.first.width
       @height = self.class::IMAGES.first.height
       @weapon = self.class::Weapon.new(@yukko)
+      @extra_weapon = self.class::ExtraWeapon.new(@yukko)
     end
 
     def current_image
