@@ -65,6 +65,16 @@ module DigYukko
 
     attr_reader :width, :height, :weapon, :extra_weapon
 
+    class << self
+      def set_max_extra_power(max)
+        @max_extra_power = max
+      end
+
+      def max_extra_power
+        @max_extra_power
+      end
+    end
+
     def initialize(yukko)
       @yukko = yukko
       @width = self.class::IMAGES.first.width
@@ -85,6 +95,10 @@ module DigYukko
 
     def item_table
       raise NotImplementedError
+    end
+
+    def max_extra_power
+      self.class.max_extra_power
     end
   end
 end

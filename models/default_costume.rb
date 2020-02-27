@@ -6,6 +6,8 @@ module DigYukko
     # TODO: 画像を初期キャラクター画像にする
     IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
 
+    set_max_extra_power 100
+
     class Weapon < ::DigYukko::Costume::Weapon
       X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
       Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)

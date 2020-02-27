@@ -60,8 +60,8 @@ module DigYukko
     def costume=(new_costume)
       return if @costume.is_a?(new_costume)
       ActionManager.push_cut_in_effect(CostumeChangeEffect.new(self, new_costume))
-      # TODO: ActionManager.change_costume
       @costume = new_costume.new(self)
+      ActionManager.change_costume
     end
 
     def x=(val)
@@ -352,8 +352,7 @@ module DigYukko
     end
 
     def max_extra_power
-      # TODO: 現在のコスチュームから返す
-      100
+      @costume.max_extra_power
     end
   end
 end

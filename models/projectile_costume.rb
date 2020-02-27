@@ -6,6 +6,8 @@ module DigYukko
     IMAGES = load_image_tiles('projectile_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
     CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
 
+    set_max_extra_power 200
+
     def update_weapon
       super
       @weapon.update_projectiles

@@ -31,6 +31,10 @@ module DigYukko
         @score_counter.add(obj)
       end
 
+      def change_costume
+        @extra_power_counter.reset_max
+      end
+
       def push_cut_in_effect(effect)
         @cut_in_effects << effect
       end

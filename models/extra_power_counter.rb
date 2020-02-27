@@ -16,11 +16,12 @@ module DigYukko
       @gage = ::DXRuby::Sprite.new(POSITION[:x], POSITION[:y], GAGE_IMAGE)
       @gages = [@bg, @gage]
       @gages.each { |g| g.center_x = 0 }
-      adjust_scale
+      adjust_max_scale
+      adjust_count_scale
     end
 
     def update
-      adjust_scale
+      adjust_count_scale
     end
 
     def zero!
@@ -31,14 +32,20 @@ module DigYukko
       @count >= @max
     end
 
+    # 現在のコスチュームの最大値をセットする
+    # カウントは旧最大値との割合を維持する
     def reset_max
+      ratio = (@count / @max.to_f).round(2)
       @max = @yukko.max_extra_power
+      @count = (@max * ratio).floor
+      adjust_max_scale
+      adjust_count_scale
     end
 
     def count_up(combo_count)
       return if skill_available?
       # TODO: いい感じの加算になるよう調整する
-      @count += combo_count
+      @count += 1 + (combo_count / 20)
       if @count > @max
         @count = @max
         # TODO: @yukko.fire_extra_power_effect
@@ -46,9 +53,12 @@ module DigYukko
       end
     end
 
-    def adjust_scale
-      @bg.scale_x = @max
-      @gage.scale_x = @count
+    def adjust_max_scale
+      @bg.scale_x = (@max * (100 / @max.to_f)).floor
+    end
+
+    def adjust_count_scale
+      @gage.scale_x = (@count * (100 / @max.to_f)).floor
     end
 
     def draw
