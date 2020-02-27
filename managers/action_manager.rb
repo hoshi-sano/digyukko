@@ -93,9 +93,9 @@ module DigYukko
       end
 
       def clear?
-        ps = progress_score
-        DigYukko.log(:debug, "check clear condition: #{Config['clear_condition']} <= #{ps}")
-        Config['clear_condition'] <= ps
+        current_level = LevelManager.calc_level(progress_score)
+        DigYukko.log(:debug, "check clear condition: #{Config['clear_condition']} <= #{current_level}")
+        Config['clear_condition'] <= current_level
       end
 
       def result

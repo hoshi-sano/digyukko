@@ -19,7 +19,7 @@ module DigYukko
         height: 480,
       },
       # TODO: 仮の値なので調整すること
-      clear_condition: 1000,
+      clear_condition: 5,
     }
 
     class << self
