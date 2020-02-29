@@ -29,6 +29,7 @@ module DigYukko
       IMAGE_SPLIT_X = 4
       IMAGE_SPLIT_Y = 2
       PROJECTILE_IMAGES = load_image_tiles('projectile', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+      MAX_PROJECTILE_NUM = 3
 
       def initialize(yukko)
         super
@@ -46,7 +47,7 @@ module DigYukko
 
       def enable(key_x, key_y)
         super
-        if @projectiles.size < 3 && key_y.zero?
+        if @projectiles.size < self.class::MAX_PROJECTILE_NUM && key_y.zero?
           @projectiles << self.class::Projectile.new(self)
         end
       end
