@@ -73,6 +73,14 @@ module DigYukko
       def max_extra_power
         @max_extra_power
       end
+
+      def set_attacking_time(time)
+        @attacking_time = time
+      end
+
+      def attacking_time
+        @attacking_time
+      end
     end
 
     def initialize(yukko)
@@ -99,6 +107,10 @@ module DigYukko
 
     def max_extra_power
       self.class.max_extra_power
+    end
+
+    def attacking_time
+      self.class.attacking_time
     end
   end
 end

@@ -23,5 +23,9 @@ module DigYukko
       ActionManager.add_score(self)
       vanish
     end
+
+    def force_break
+      self.break
+    end
   end
 end

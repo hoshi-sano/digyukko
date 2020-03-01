@@ -7,6 +7,7 @@ module DigYukko
     IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
 
     set_max_extra_power 100
+    set_attacking_time 5
 
     class Weapon < ::DigYukko::Costume::Weapon
       X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)

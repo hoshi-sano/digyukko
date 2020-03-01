@@ -9,6 +9,7 @@ module DigYukko
         [HardBreakableBlock,    0],
         [ProjectileCostumeItem, 0],
         [BoundCostumeItem,      0],
+        [DashCostumeItem,       10],
         [ItemBox,               2],
         [LowRecoverItem,        0],
         [FullRecoverItem,       0],

@@ -4,5 +4,8 @@ module DigYukko
 
     def break
     end
+
+    def force_break
+    end
   end
 end

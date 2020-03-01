@@ -144,9 +144,9 @@ module DigYukko
       end
     end
 
-    def move_left
+    def move_left(force = false)
       @x_dir = DIR[:left]
-      return if attacking? || extra_skill_using? || self.x <= 0
+      return if !force && (attacking? || extra_skill_using? || self.x <= 0)
       if block = @map.find_block(self.x, self.y + self.height / 4, -X_MOVE_UNIT)
         self.x = block.x + block.width
       else
@@ -154,9 +154,9 @@ module DigYukko
       end
     end
 
-    def move_right
+    def move_right(force = false)
       @x_dir = DIR[:right]
-      return if attacking? || extra_skill_using? || self.x >= (@map.field.width - self.width)
+      return if !force && (attacking? || extra_skill_using? || self.x >= (@map.field.width - self.width))
       if block = @map.find_block(self.x + width, self.y, X_MOVE_UNIT)
         self.x = block.x - width
       else
@@ -170,6 +170,10 @@ module DigYukko
 
     def current_extra_weapon
       @costume.extra_weapon
+    end
+
+    def current_attacking_time
+      @costume.attacking_time
     end
 
     # 攻撃アクションの処理
@@ -190,7 +194,7 @@ module DigYukko
     def update_attacking_time
       return unless @attacking_time
       @attacking_time += 1
-      finish_attack_animation if @attacking_time > 5
+      finish_attack_animation if @attacking_time > current_attacking_time
     end
 
     def attacking?

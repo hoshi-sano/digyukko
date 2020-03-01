@@ -7,6 +7,7 @@ module DigYukko
     CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
 
     set_max_extra_power 200
+    set_attacking_time 5
 
     def update_weapon
       super

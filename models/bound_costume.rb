@@ -8,6 +8,7 @@ module DigYukko
     CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
 
     set_max_extra_power 300
+    set_attacking_time 5
 
     def item_table
       {

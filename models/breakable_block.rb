@@ -14,7 +14,7 @@ module DigYukko
       @temp_unbreakable = nil if @temp_unbreakable < 0
     end
 
-    def break
+    def _break
       return if @temp_unbreakable
       @map.push_fragments(
         %i[upper_left upper_right lower_left lower_right].map do |pos|
@@ -25,6 +25,14 @@ module DigYukko
       ActionManager.combo
       ActionManager.add_score(self)
       vanish
+    end
+
+    def break
+      _break
+    end
+
+    def force_break
+      _break
     end
   end
 end
