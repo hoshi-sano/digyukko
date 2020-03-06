@@ -50,6 +50,9 @@ module DigYukko
         super
         if @projectiles.size < self.class::MAX_PROJECTILE_NUM && key_y.zero?
           @projectiles << self.class::Projectile.new(self)
+          true
+        else
+          false
         end
       end
 

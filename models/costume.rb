@@ -45,6 +45,7 @@ module DigYukko
         end
         self.visible = true
         self.collision_enable = true
+        true
       end
 
       def disable
@@ -111,6 +112,14 @@ module DigYukko
 
     def attacking_time
       self.class.attacking_time
+    end
+
+    def air_brake?
+      false
+    end
+
+    def y_speed
+      false
     end
   end
 end

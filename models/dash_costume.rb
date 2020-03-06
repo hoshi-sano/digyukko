@@ -7,7 +7,7 @@ module DigYukko
     IMAGES = load_image_tiles('projectile_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
     CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
 
-    set_max_extra_power 30
+    set_max_extra_power 300
     set_attacking_time 10
 
     def update_weapon
@@ -24,16 +24,28 @@ module DigYukko
       }
     end
 
+    # ダッシュ中は重力が働かせないよう、trueを返す
+    def air_brake?
+      @weapon.enabled?
+    end
+
+    # ダッシュ中は重力が働かない
+    def y_speed
+      0
+    end
+
     class Weapon < ::DigYukko::Costume::Weapon
       # TODO: 画像は暫定
       X_IMAGE = Image.new(Yukko::WIDTH + 10, Yukko::HEIGHT + 5, ::DXRuby::C_BLUE)
 
       def enable(_key_x, _key_y)
+        return false if enabled?
         @action = @yukko.x_dir == Yukko::DIR[:left] ? :move_left : :move_right
         @x_yukko_diff = (@yukko.width - self.image.width) / 2
         self.visible = true
         self.collision_enable = true
         set_position
+        true
       end
 
       def update

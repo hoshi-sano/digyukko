@@ -178,7 +178,7 @@ module DigYukko
 
     # 攻撃アクションの処理
     def attack(key_x, key_y)
-      current_weapon.enable(key_x, key_y)
+      current_weapon.enable(key_x, key_y) &&
       start_attack_animation
     end
 
@@ -209,9 +209,10 @@ module DigYukko
     # 特殊行動アクションの処理
     def extra_skill(key_x, key_y, counter)
       return unless counter.skill_available?
-      counter.zero!
-      current_extra_weapon.enable(key_x, key_y)
-      start_extra_skill_animation
+      if current_extra_weapon.enable(key_x, key_y)
+        counter.zero!
+        start_extra_skill_animation
+      end
     end
 
     def start_extra_skill_animation
@@ -286,9 +287,13 @@ module DigYukko
 
     def update_aerial_params
       @aerial_time += 1
-      # TODO: 落下速度計算は見直しの余地あり
-      @y_speed = @y_speed + (@aerial_time * 9.8) / 300
-      @y_speed = height if @y_speed > height
+      if @costume.air_brake?
+        @y_speed = @costume.y_speed || @y_speed
+      else
+        # TODO: 落下速度計算は見直しの余地あり
+        @y_speed = @y_speed + (@aerial_time * 9.8) / 300
+        @y_speed = height if @y_speed > height
+      end
       @y_speed
     end
 
