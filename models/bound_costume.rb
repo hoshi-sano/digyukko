@@ -43,8 +43,8 @@ module DigYukko
           yukko = weapon.yukko
           img = BALL_IMAGES.first.first
           super(yukko.x + (yukko.x_dir * img.width / 2),
-          yukko.mid_y - (img.height / 2),
-          img)
+                yukko.mid_y - (img.height / 2),
+                img)
           @direction = yukko.x_dir
           @image_y = Yukko::DIR.values.index(yukko.x_dir)
           @image_x = 0
