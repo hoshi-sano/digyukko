@@ -114,10 +114,14 @@ module DigYukko
       @life -= val
       @temporary_invincible_count = TEMPORARY_INVINCIBLE_COUNT_MAX
       @map.shake!
-      if @life <= 0
+      if failed?
         @life = 0
         ActionManager.failed
       end
+    end
+
+    def failed?
+      @life <= 0
     end
 
     def invincible?
@@ -287,7 +291,7 @@ module DigYukko
 
     def update_aerial_params
       @aerial_time += 1
-      if @costume.air_brake?
+      if air_brake?
         @y_speed = @costume.y_speed || @y_speed
       else
         # TODO: 落下速度計算は見直しの余地あり
@@ -295,6 +299,10 @@ module DigYukko
         @y_speed = height if @y_speed > height
       end
       @y_speed
+    end
+
+    def air_brake?
+      !failed? && @costume.air_brake?
     end
 
     def update_image

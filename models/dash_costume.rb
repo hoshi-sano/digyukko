@@ -38,17 +38,28 @@ module DigYukko
       # TODO: 画像は暫定
       X_IMAGE = Image.new(Yukko::WIDTH + 10, Yukko::HEIGHT + 5, ::DXRuby::C_BLUE)
 
+      def initialize(yukko)
+        super
+        @landed = false
+      end
+
       def enable(_key_x, _key_y)
-        return false if enabled?
+        return false unless available?
         @action = @yukko.x_dir == Yukko::DIR[:left] ? :move_left : :move_right
         @x_yukko_diff = (@yukko.width - self.image.width) / 2
         self.visible = true
         self.collision_enable = true
+        @landed = false
         set_position
         true
       end
 
+      def available?
+        @landed && !enabled?
+      end
+
       def update
+        @landed = @landed || @yukko.landing?
         return unless enabled?
         @yukko.send(@action, true)
         set_position
@@ -66,6 +77,7 @@ module DigYukko
       end
 
       def update
+        @landed = @landed || @yukko.landing?
         return unless enabled?
         5.times { @yukko.send(@action, true) }
         set_position
