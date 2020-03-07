@@ -54,6 +54,7 @@ module DigYukko
         end
 
         def update
+          @bounded = false
           self.image = current_image
           self.y += @y_speed
           @y_speed += self.class::Y_SPEED_DIFF
@@ -67,8 +68,15 @@ module DigYukko
 
         def shot(obj)
           obj.break
-          if (obj.y > self.y) && (obj.y < self.y + @y_speed.abs)
+          return if @bounded
+          bound(obj)
+        end
+
+        def bound(obj)
+          @bounded = true
+          if @y_speed > 0
             @y_speed = Y_SPEED_INIT
+            self.y = obj.y - self.image.height - 1
             @ttl -= 1 unless obj.is_a?(UnbreakableBlock)
           else
             vanish if obj.is_a?(UnbreakableBlock)
