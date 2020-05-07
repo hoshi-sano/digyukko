@@ -4,8 +4,8 @@ module DigYukko
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
     # TODO: 画像は暫定
-    IMAGES = load_image_tiles('projectile_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
-    CUT_IN_IMAGE = load_image('projectile_costume_cut_in')
+    IMAGES = load_image_tiles('bound_ball_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    CUT_IN_IMAGE = load_image('bound_ball_costume_cut_in')
 
     set_max_extra_power 300
     set_attacking_time 5
