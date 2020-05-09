@@ -3,7 +3,6 @@ module DigYukko
   class BoundCostume < ProjectileCostume
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
-    # TODO: 画像は暫定
     IMAGES = load_image_tiles('bound_ball_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
     CUT_IN_IMAGE = load_image('bound_ball_costume_cut_in')
 
@@ -19,17 +18,9 @@ module DigYukko
     end
 
     class Weapon < ::DigYukko::ProjectileCostume::Weapon
-      # TODO: 正式な画像に変換
-      BALL_IMAGES = [
-        [
-          ::DXRuby::Image.new(16, 16).tap { |i| i.circle_fill(8, 8, 8, ::DXRuby::C_RED) },
-          ::DXRuby::Image.new(16, 16).tap { |i| i.box_fill(0, 8, 16, 16, ::DXRuby::C_RED) }
-        ],
-        [
-          ::DXRuby::Image.new(16, 16).tap { |i| i.circle_fill(8, 8, 8, ::DXRuby::C_YELLOW) },
-          ::DXRuby::Image.new(16, 16).tap { |i| i.box_fill(0, 8, 16, 16, ::DXRuby::C_YELLOW) }
-        ],
-      ]
+      IMAGE_SPLIT_X = 2
+      IMAGE_SPLIT_Y = 2
+      BALL_IMAGES = load_image_tiles('bound_ball', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
       MAX_PROJECTILE_NUM = 2
       PROJECTILE_TTL = 1
 
@@ -41,13 +32,12 @@ module DigYukko
 
         def initialize(weapon)
           yukko = weapon.yukko
-          img = BALL_IMAGES.first.first
+          img = BALL_IMAGES.first
           super(yukko.x + (yukko.x_dir * img.width / 2),
                 yukko.mid_y - (img.height / 2),
                 img)
           @direction = yukko.x_dir
           @image_y = Yukko::DIR.values.index(yukko.x_dir)
-          @image_x = 0
           @y_speed = Y_SPEED_INIT
           @ttl = weapon.class::PROJECTILE_TTL
           self.target = weapon.target
@@ -63,7 +53,7 @@ module DigYukko
         end
 
         def current_image
-          @y_speed > 0 ? BALL_IMAGES[@image_y][1] : BALL_IMAGES[@image_y][0]
+          @y_speed > 0 ? BALL_IMAGES[@image_y * IMAGE_SPLIT_Y + 0] : BALL_IMAGES[@image_y * IMAGE_SPLIT_Y + 1]
         end
 
         def shot(obj)

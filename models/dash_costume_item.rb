@@ -1,6 +1,6 @@
 module DigYukko
   class DashCostumeItem < Item
-    set_image load_image('projectile_item') # TODO: 暫定
+    set_image load_image('dash_item')
     set_score 10
     set_power 0
     fragment(image)

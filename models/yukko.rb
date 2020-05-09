@@ -48,6 +48,7 @@ module DigYukko
       # 滞空時間(frame)
       @aerial_time = 0
       @temporary_invincible_count = 0
+      self.z = 1
     end
 
     def map=(map)
@@ -58,7 +59,7 @@ module DigYukko
     end
 
     def costume=(new_costume)
-      return if @costume.is_a?(new_costume)
+      return if @costume.class == new_costume
       ActionManager.push_cut_in_effect(CostumeChangeEffect.new(self, new_costume))
       @costume = new_costume.new(self)
       ActionManager.change_costume
