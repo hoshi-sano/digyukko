@@ -4,7 +4,6 @@ module DigYukko
     def initialize(yukko, score)
       super(yukko, score)
       clear_item = ClearItem.new(self, 16, 16)
-      clear_item.target = @field
       @field_objects << clear_item
       @items << clear_item
     end
