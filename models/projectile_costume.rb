@@ -47,12 +47,18 @@ module DigYukko
       end
 
       def enable(key_x, key_y)
-        super
-        if @projectiles.size < self.class::MAX_PROJECTILE_NUM && key_y.zero?
-          @projectiles << self.class::Projectile.new(self)
-          true
+        if key_y.zero?
+          if @projectiles.size < self.class::MAX_PROJECTILE_NUM
+            @projectiles << self.class::Projectile.new(self)
+            true
+          end
         else
-          false
+          self.image = self.class::Y_IMAGE
+          self.x = @yukko.x
+          self.y = (key_y < 0) ? (@yukko.y - self.image.height) : @yukko.foot_y
+          self.visible = true
+          self.collision_enable = true
+          true
         end
       end
 
