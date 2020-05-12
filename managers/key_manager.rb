@@ -104,6 +104,10 @@ module DigYukko
       def right
         [::DXRuby::K_RIGHT, ::DXRuby::P_RIGHT]
       end
+
+      def space
+        ::DXRuby::K_SPACE
+      end
     end
   end
   # alias
