@@ -14,6 +14,8 @@ SE_LIST = {
   power_up: 'se/wav/se_maoudamashii_magical13.wav',  # パワーアップ音
   pre_bomb: '/se/wav/se_maoudamashii_retro24.wav',   # 爆発前兆音
   success:  '/se/wav/se_maoudamashii_jingle05.wav',  # クリア音
+  charged:  '/se/wav/se_maoudamashii_retro25.wav',  # 特技パワーチャージ音
+  extra:    '/se/wav/se_maoudamashii_retro13.wav',  # 特技発動音
 }
 
 

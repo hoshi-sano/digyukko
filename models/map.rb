@@ -1,6 +1,6 @@
 module DigYukko
   class Map
-    attr_reader :blocks, :field, :field_objects, :last_block, :items, :object_generator
+    attr_reader :blocks, :field, :field_y, :field_objects, :last_block, :items, :object_generator
     attr_accessor :yukko
 
     class BlockChecker < ::DXRuby::Sprite

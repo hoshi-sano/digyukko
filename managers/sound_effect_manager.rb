@@ -5,6 +5,8 @@ module DigYukko
     class << self
       SE_FILE_NAMES = [
         :break,    # ブロック破壊音
+        :charged,  # 特技パワーチャージ音
+        :extra,    # 特技発動音
         :failed,   # 失敗音
         :fanfare,  # ファンファーレ
         :fatal,    # 致命傷

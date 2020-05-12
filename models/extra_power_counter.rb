@@ -46,10 +46,9 @@ module DigYukko
       return if skill_available?
       # TODO: いい感じの加算になるよう調整する
       @count += 1 + (combo_count / 20)
-      if @count > @max
+      if @count >= @max
         @count = @max
-        # TODO: @yukko.fire_extra_power_effect
-        SE.play(:ok) # TODO: 専用の音を用意する
+        @yukko.fire_extra_power_charged_effect
       end
     end
 

@@ -34,6 +34,37 @@ module DigYukko
       end
     end
 
+    class PowerChargedEffect < ::DXRuby::Sprite
+      FRAME_NUM = 8
+      WIDTH = Yukko::WIDTH * 3
+      HEIGHT = Yukko::HEIGHT * 3
+      IMAGES = (0..FRAME_NUM).to_a.map do |n|
+        ::DXRuby::Image.new(WIDTH, HEIGHT).tap do |img|
+          img.circle_fill(img.width / 2, img.height / 2, img.width / 2, ::DXRuby::C_WHITE)
+          img.circle_fill(img.width / 2, img.height / 2, (img.width / 2 / FRAME_NUM) * n, [0, 0, 0, 0])
+        end
+      end
+
+      def initialize(yukko)
+        @yukko = yukko
+        @count = 0
+        dx = (WIDTH - @yukko.width) / 2
+        dy = (HEIGHT - @yukko.height) / 2
+        super(@yukko.x - dx, @yukko.y - dy, IMAGES.first)
+        self.z = 255
+      end
+
+      def update
+        @count += 1
+        self.image = IMAGES[@count]
+        vanish if finished?
+      end
+
+      def finished?
+        @count > FRAME_NUM
+      end
+    end
+
     def initialize
       @costume = DefaultCostume.new(self)
       @max_life = 100
@@ -48,6 +79,7 @@ module DigYukko
       # 滞空時間(frame)
       @aerial_time = 0
       @temporary_invincible_count = 0
+      @realtime_effects = []
       self.z = 1
     end
 
@@ -80,6 +112,7 @@ module DigYukko
       @foot_collision.draw
       current_weapon.draw
       current_extra_weapon.draw
+      @realtime_effects.each(&:draw)
     end
 
     def width
@@ -222,8 +255,24 @@ module DigYukko
       return unless counter.skill_available?
       if current_extra_weapon.enable(key_x, key_y)
         counter.zero!
+        fire_extra_skill_effect
         start_extra_skill_animation
       end
+    end
+
+    def push_realtime_effect(effect)
+      effect.target = self.target
+      @realtime_effects << effect
+    end
+
+    def fire_extra_skill_effect
+      SE.play(:extra)
+      push_realtime_effect(FlashEffect.new(self, -@map.field_y, 150))
+    end
+
+    def fire_extra_power_charged_effect
+      SE.play(:charged)
+      push_realtime_effect(PowerChargedEffect.new(self))
     end
 
     def start_extra_skill_animation
@@ -279,6 +328,7 @@ module DigYukko
     #     * 重力によるY方向移動距離計算
     #   * Y方向移動距離の加算
     #   * めりこみ回避の位置調整
+    #   * エフェクトの更新
     #   * 攻撃中時間の更新
     #   * アイテムの取得チェック
     def update
@@ -290,6 +340,8 @@ module DigYukko
       self.y = self.y + @y_speed
       @costume.update_weapon
       position_compensate
+      @realtime_effects.each(&:update)
+      @realtime_effects.delete_if(&:finished?)
       update_attacking_time
       update_extra_skill_time
       update_invincible_count
