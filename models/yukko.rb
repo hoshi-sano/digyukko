@@ -157,16 +157,22 @@ module DigYukko
       else
         self.x -= X_MOVE_UNIT
       end
+      self.x = 0 if self.x < 0
     end
 
     def move_right(force = false)
       @x_dir = DIR[:right]
-      return if !force && (attacking? || extra_skill_using? || self.x >= (@map.field.width - self.width))
+      return if !force && (attacking? || extra_skill_using? || self.x >= x_right_edge)
       if block = @map.find_block(self.x + width, self.y, X_MOVE_UNIT)
         self.x = block.x - width
       else
         self.x += X_MOVE_UNIT
       end
+      self.x = x_right_edge if (self.x > x_right_edge)
+    end
+
+    def x_right_edge
+      @right_edge ||= @map.field.width - self.width
     end
 
     def current_weapon
