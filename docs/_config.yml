@@ -1,1 +1,6 @@
 theme: jekyll-theme-minimal
+plugins:
+  - jekyll-seo-tag
+twitter:
+  username: hoshi-sano
+  card: summary_large_image
