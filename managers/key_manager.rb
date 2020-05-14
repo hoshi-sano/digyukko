@@ -1,11 +1,5 @@
 module DigYukko
   module KeyManager
-    DEFAULT_CONFIG = {
-      attack: ::DXRuby::K_Z,
-      jump:   ::DXRuby::K_X,
-      extra:  ::DXRuby::K_C,
-    }
-
     class << self
       def init
         # 本アプリケーションではパッドも含めたキーコンフィグ機能
