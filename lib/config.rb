@@ -18,6 +18,13 @@ module DigYukko
         width:  800,
         height: 480,
       },
+      share: {
+        url: nil,
+        clear_text: 'GAME CLEAR!',
+        share_text: 'DEPTH: depth, SCORE: score',
+        failed_message: 'ERROR: cannot open tweet window...',
+        hashtag: 'digyukko',
+      },
       # TODO: 仮の値なので調整すること
       clear_condition: 5,
     }
