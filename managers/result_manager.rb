@@ -9,8 +9,8 @@ module DigYukko
     HEADER_Y = 100
     LINE_IMAGE = ::DXRuby::Image.new(350, 4, ::DXRuby::C_WHITE)
     SHARE_MESSAGE_STR = 'PUSH SPACE KEY: Share on Twitter'
-    CLEAR_TEXT = "ゲームクリアです！"
-    SHARE_TEXT_BASE = "エスパーユッコが 深さ:depth 、スコア: score まで掘りました！"
+    CLEAR_TEXT = Config['share.clear_text'] || Config::DEFAULT_SETTINGS[:share][:clear_text]
+    SHARE_TEXT_BASE = Config['share.share_text'] || Config::DEFAULT_SETTINGS[:share][:share_text]
 
     class << self
       def init(succeeded_or_failed)
@@ -21,6 +21,7 @@ module DigYukko
         @score_strs = generate_score_strings(result)
         @depth = result[:depth]
         @share_message = @score_strs[-1]
+        @share_message.visible = false unless Config['share.url']
         @yukko = result[:yukko]
         prepare_yukko
         @index = nil
@@ -100,8 +101,9 @@ module DigYukko
       end
 
       def check_keys
+        return unless @index
         return unless KEY.push?(KEY.attack) || KEY.push?(KEY.space)
-        if @index && @index >= @score_strs.size && se_finished?
+        if @index >= @score_strs.size && se_finished?
           if KEY.push?(KEY.attack)
             go_to_title_scene
           elsif @share_message.visible
@@ -128,19 +130,19 @@ module DigYukko
           wsh = WIN32OLE.new("WScript.Shell")
           prog_id = wsh.RegRead("HKCU\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\https\\UserChoice\\ProgId")
           command_base = wsh.RegRead("HKEY_CLASSES_ROOT\\#{prog_id}\\shell\\open\\command\\")
-          text = SHARE_TEXT_BASE.gsub(/depth|score/, {'depth' => @depth, 'score' => @total_score})
+          text = SHARE_TEXT_BASE.gsub(/depth|score/, {'depth' => @depth, 'score' => @total_score.to_i})
           text = CLEAR_TEXT + text if @succeeded_or_failed == :success
           hash = {
             text: text,
-            url: 'https://google.com', # TODO: 差し替える
-            hashtags: 'digyukko',
+            url: Config['share.url'],
+            hashtags: Config['share.hashtag'] || Config::DEFAULT_SETTINGS[:share][:hashtag] || 'digyukko',
           }
           params = URI.encode_www_form(hash)
           command = command_base.gsub("%1", "https://twitter.com/intent/tweet/?#{params}")
           Kernel.spawn(command)
           @share_message.visible = false
         rescue => e
-          @share_message.str = "Tweetに失敗しました…"
+          @share_message.str = Config['share.failed_message'] || Config::DEFAULT_SETTINGS[:share][:failed_message]
           DigYukko.log(:error, e.message)
           DigYukko.log(:debug, e.backtrace.join("\n"))
         end
