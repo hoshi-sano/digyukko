@@ -1,4 +1,5 @@
 theme: jekyll-theme-minimal
+logo: /images/logo.png
 plugins:
   - jekyll-seo-tag
 twitter:
