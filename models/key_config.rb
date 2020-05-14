@@ -1,8 +1,8 @@
 module DigYukko
   class KeyConfig
     DEFAULT = {
-      jump:   ::DXRuby::K_Z,
-      attack: ::DXRuby::K_X,
+      attack: ::DXRuby::K_Z,
+      jump:   ::DXRuby::K_X,
       extra:  ::DXRuby::K_C,
     }
 
