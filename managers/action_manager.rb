@@ -10,6 +10,7 @@ module DigYukko
         @extra_power_counter = extra_counter || ExtraPowerCounter.new(@yukko)
         @score_counter = ScoreCounter.new(@combo_counter, @depth_counter, score)
         @life_counter = LifeCounter.new(@yukko)
+        @level_counter = Config['debug'] ? LevelCounter.new : LevelCounterDummy.new
         @cut_in_effects = []
       end
 
@@ -65,6 +66,7 @@ module DigYukko
         @score_counter.draw
         @life_counter.draw
         @extra_power_counter.draw
+        @level_counter.draw
         @cut_in_effects.each(&:draw)
       end
 

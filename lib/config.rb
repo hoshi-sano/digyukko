@@ -27,6 +27,7 @@ module DigYukko
       },
       # TODO: 仮の値なので調整すること
       clear_condition: 5,
+      debug: false,
     }
 
     class << self
