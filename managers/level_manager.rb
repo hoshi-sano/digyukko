@@ -16,6 +16,10 @@ module DigYukko
         end
         @@current_level
       end
+
+      def current_level
+        @@current_level
+      end
     end
 
     LEVEL_TO_SCORE = {
