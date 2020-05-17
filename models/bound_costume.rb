@@ -31,13 +31,13 @@ module DigYukko
         Y_SPEED_DIFF = 1
 
         def initialize(weapon)
-          yukko = weapon.yukko
+          @yukko = weapon.yukko
           img = BALL_IMAGES.first
-          super(yukko.x + (yukko.x_dir * img.width / 2),
-                yukko.mid_y - (img.height / 2),
+          super(@yukko.x + (@yukko.x_dir * img.width / 2),
+                @yukko.mid_y - (img.height / 2),
                 img)
-          @direction = yukko.x_dir
-          @image_y = Yukko::DIR.values.index(yukko.x_dir)
+          @direction = @yukko.x_dir
+          @image_y = Yukko::DIR.values.index(@yukko.x_dir)
           @y_speed = Y_SPEED_INIT
           @ttl = weapon.class::PROJECTILE_TTL
           self.target = weapon.target
@@ -49,7 +49,8 @@ module DigYukko
           self.y += @y_speed
           @y_speed += self.class::Y_SPEED_DIFF
           self.x = self.x + (self.class::X_SPEED * @direction)
-          vanish if @ttl <= 0 || self.x < 0 || self.x > Config['window.width']
+          vanish if @ttl <= 0 || self.x < 0 || self.y < (@yukko.y - (Config['window.height'] / 2)) ||
+                    self.x > Config['window.width'] || self.y > (@yukko.y + (Config['window.height'] / 2))
         end
 
         def current_image
