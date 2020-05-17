@@ -5,12 +5,12 @@ module DigYukko
     # ランダムマップ生成時の破壊可能オブジェクト排出率管理用クラス
     class BreakableObjectTable < Hash
       DEFAULT_SCORE = [
-        [BreakableBlock,        100],
+        [BreakableBlock,        200],
         [HardBreakableBlock,    0],
         [ProjectileCostumeItem, 0],
         [BoundCostumeItem,      0],
         [DashCostumeItem,       0],
-        [ItemBox,               2],
+        [ItemBox,               4],
         [LowRecoverItem,        0],
         [FullRecoverItem,       0],
         [SmallScoreUpItem,      0],
@@ -106,7 +106,7 @@ module DigYukko
     # アイテム排出率管理用クラス
     class ItemTable < BreakableObjectTable
       DEFAULT_SCORE = [
-        [SmallScoreUpItem,      100],
+        [SmallScoreUpItem,      80],
         [MiddleScoreUpItem,     5],
         [LargeScoreUpItem,      1],
         [ProjectileCostumeItem, 1],

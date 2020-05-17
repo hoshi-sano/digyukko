@@ -9,17 +9,17 @@ module DigYukko
 
     test 'assert default score' do
       generator = MapObjectGenerator.new(Yukko.new, 0)
-      assert { 80 == generator.breakable_object_table[BreakableBlock] }
+      assert { 200 == generator.breakable_object_table[BreakableBlock] }
       assert { 0 == generator.breakable_object_table[HardBreakableBlock] }
       assert { 0 == generator.breakable_object_table[ProjectileCostumeItem] }
-      assert { 2 == generator.item_table[ProjectileCostumeItem] }
+      assert { 1 == generator.item_table[ProjectileCostumeItem] }
       assert { 2 == generator.item_table[LowRecoverItem] }
       assert { 0 == generator.item_table[FullRecoverItem] }
     end
 
     test 'add score' do
       generator = MapObjectGenerator.new(Yukko.new, 0)
-      assert { 80 == generator.breakable_object_table[BreakableBlock] }
+      assert { 200 == generator.breakable_object_table[BreakableBlock] }
       assert { 0 == generator.breakable_object_table[HardBreakableBlock] }
       assert { 0 == generator.breakable_object_table[ProjectileCostumeItem] }
 
@@ -35,7 +35,7 @@ module DigYukko
 
     test 'add score temporary' do
       generator = MapObjectGenerator.new(Yukko.new, 0)
-      assert { 80 == generator.breakable_object_table[BreakableBlock] }
+      assert { 200 == generator.breakable_object_table[BreakableBlock] }
       assert { 0 == generator.breakable_object_table[HardBreakableBlock] }
       assert { 0 == generator.breakable_object_table[ProjectileCostumeItem] }
 
@@ -50,7 +50,7 @@ module DigYukko
         assert { 10 == table[ProjectileCostumeItem] }
       end
 
-      assert { 80 == generator.breakable_object_table[BreakableBlock] }
+      assert { 200 == generator.breakable_object_table[BreakableBlock] }
       assert { 0 == generator.breakable_object_table[HardBreakableBlock] }
       assert { 0 == generator.breakable_object_table[ProjectileCostumeItem] }
     end
