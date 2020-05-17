@@ -18,7 +18,8 @@ module DigYukko
     def item_table
       {
         ProjectileCostumeItem => :zero,
-        # TODO: 上位コスチューム
+        BoundCostumeItem => 2,
+        DashCostumeItem => 2,
       }
     end
 

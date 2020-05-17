@@ -26,7 +26,7 @@ module DigYukko
         hashtag: 'digyukko',
       },
       # TODO: 仮の値なので調整すること
-      clear_condition: 5,
+      clear_condition: 20,
       debug: false,
     }
 
