@@ -1,6 +1,6 @@
 module DigYukko
   class ComboCounter
-    attr_reader :count, :score
+    attr_reader :count, :score, :max_combo
 
     POSITION = { x: Config['window.width'] - 80, y: 60 }
     DISPLAY_THRESHOLD = 2
