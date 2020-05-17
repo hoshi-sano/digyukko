@@ -103,7 +103,7 @@ module DigYukko
       def result
         {
           yukko: @yukko,
-          combo: @combo_counter.count.to_i,
+          combo: @combo_counter.max_combo.to_i,
           depth: @depth_counter.count.to_i,
           score: @score_counter.score.to_i,
         }
