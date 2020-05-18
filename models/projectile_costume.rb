@@ -26,8 +26,8 @@ module DigYukko
     class Weapon < ::DigYukko::Costume::Weapon
       include HelperMethods
 
-      X_IMAGE = Image.new(1, 1, ::DXRuby::C_BLUE)
-      Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
+      X_IMAGE = Image.new(1, 1, debug_color)
+      Y_IMAGE = Image.new(32, 5, debug_color)
       IMAGE_SPLIT_X = 4
       IMAGE_SPLIT_Y = 2
       PROJECTILE_IMAGES = load_image_tiles('projectile', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
