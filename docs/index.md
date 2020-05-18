@@ -1,10 +1,10 @@
 ---
 title: ほりゆけ！ホリユウコ
 description: 堀裕子がひたすら穴を掘り続けるゲーム
-image: /images/logo.png
+image: https://github.com/hoshi-sano/digyukko/wiki/images/logo.png
 ---
 
-![title](/images/title.png)
+![title](https://github.com/hoshi-sano/digyukko/wiki/images/title.png)
 
 # ダウンロード
 
@@ -40,5 +40,5 @@ ZIPファイルを展開したフォルダ直下のmain.exeをダブルクリッ
 |------|------|------|
 | 移動 | 「←」「→」キー | 押したキーの方向に向かって歩く。 |
 | 掘る・決定 | 「Z」キー | 目の前のブロックやアイテムを掘る、破壊する。「↑」「↓」キーと組み合わせると上下のブロックやアイテムを掘る、破壊する。メニューの決定をする。 |
-| ジャンプ | 「X」キー | ブロックやアイテムを掘る、破壊する。メニューの決定をする。 |
+| ジャンプ | 「X」キー | ジャンプする。ジャンプ中に「掘る」や「特技」を行うことも可能。 |
 | 特技 | 「C」キー | 画面左上の特技ゲージが満タンになると強力な特技が使える。 |

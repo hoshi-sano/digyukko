@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
-logo: /images/logo.png
+logo: https://github.com/hoshi-sano/digyukko/wiki/images/logo.png
 plugins:
   - jekyll-seo-tag
 twitter:
