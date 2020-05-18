@@ -16,7 +16,9 @@ module DigYukko
 
     # 足の衝突判定用クラス
     class FootCollision < ::DXRuby::Sprite
-      IMAGE = Image.new(Yukko::WIDTH, 1, ::DXRuby::C_BLUE)
+      include HelperMethods
+
+      IMAGE = Image.new(Yukko::WIDTH, 1, debug_color)
 
       def initialize(yukko)
         @yukko = yukko

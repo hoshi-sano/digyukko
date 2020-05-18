@@ -10,13 +10,13 @@ module DigYukko
     set_attacking_time 5
 
     class Weapon < ::DigYukko::Costume::Weapon
-      X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
-      Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
+      X_IMAGE = Image.new(5, 30, debug_color)
+      Y_IMAGE = Image.new(32, 5, debug_color)
     end
 
     class ExtraWeapon < ::DigYukko::Costume::ExtraWeapon
-      X_IMAGE = Image.new(64, 64, ::DXRuby::C_BLUE)
-      Y_IMAGE = Image.new(64, 64, ::DXRuby::C_BLUE)
+      X_IMAGE = Image.new(64, 64, debug_color)
+      Y_IMAGE = Image.new(64, 64, debug_color)
     end
 
     def item_table

@@ -78,5 +78,16 @@ module DigYukko
       end
       sum.map { |v| v / d }
     end
+
+    # デバッグモード以外の場合は透明となる色
+    def debug_color(color = ::DXRuby::C_BLUE)
+      return color if Config['debug']
+      if color.size == 3
+        rgb = color
+      else
+        rgb = color[1..-1]
+      end
+      [0] + rgb
+    end
   end
 end

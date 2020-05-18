@@ -16,6 +16,8 @@ module DigYukko
       # X_IMAGE = Image.new(5, 30, ::DXRuby::C_BLUE)
       # Y_IMAGE = Image.new(32, 5, ::DXRuby::C_BLUE)
 
+      include HelperMethods
+
       attr_reader :yukko
 
       def initialize(yukko)
