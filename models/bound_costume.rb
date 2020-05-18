@@ -33,9 +33,8 @@ module DigYukko
         def initialize(weapon)
           @yukko = weapon.yukko
           img = BALL_IMAGES.first
-          super(@yukko.x + (@yukko.x_dir * img.width / 2),
-                @yukko.mid_y - (img.height / 2),
-                img)
+          x = (@yukko.x_dir < 0) ? @yukko.x - img.width : @yukko.x + @yukko.width
+          super(x, @yukko.foot_y - img.height, img)
           @direction = @yukko.x_dir
           @image_y = Yukko::DIR.values.index(@yukko.x_dir)
           @y_speed = Y_SPEED_INIT
