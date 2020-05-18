@@ -66,12 +66,12 @@ module DigYukko
       end
 
       def calc_bonus_score(result)
-        ((result[:yukko].life * 0.01) + 1) * result[:depth] * result[:combo]
+        ((result[:yukko].life * 0.01) + 1) * (result[:depth] / 100) * result[:combo]
       end
 
       def bonus_score_str(result)
         life_bonus = '%.2f' % ((result[:yukko].life * 0.01) + 1)
-        "#{life_bonus} x #{result[:depth]} x #{result[:combo]} +"
+        "#{life_bonus} x #{result[:depth] / 100} x #{result[:combo]} +"
       end
 
       def update_components
