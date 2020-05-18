@@ -148,12 +148,16 @@ module DigYukko
     def damage(val)
       return if invincible?
       @life -= val
-      @temporary_invincible_count = TEMPORARY_INVINCIBLE_COUNT_MAX
+      temporary_invincible!
       @map.shake!
       if failed?
         @life = 0
         ActionManager.failed
       end
+    end
+
+    def temporary_invincible!(count = TEMPORARY_INVINCIBLE_COUNT_MAX)
+       @temporary_invincible_count = count
     end
 
     def failed?
@@ -424,8 +428,8 @@ module DigYukko
     # * 現在のコスチュームの上位コスチュームアイテムを排出する
     def current_item_table
       {
-        LowRecoverItem => ((@max_life - @life) / 10) / 3,
-        FullRecoverItem => (@life <= 25) ? 1 : 0,
+        LowRecoverItem => ((@max_life - @life) / 10),
+        FullRecoverItem => (@life <= 30) ? 5 : 0,
       }.merge(@costume.item_table)
     end
 
