@@ -110,7 +110,7 @@ module DigYukko
         [MiddleScoreUpItem,     5],
         [LargeScoreUpItem,      1],
         [ProjectileCostumeItem, 1],
-        [LowRecoverItem,        2],
+        [LowRecoverItem,        5],
         [FullRecoverItem,       0],
       ]
     end

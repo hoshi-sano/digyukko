@@ -58,6 +58,8 @@ module DigYukko
         @landed = false
         set_position
         @afterimages << generate_afterimage
+        # ダッシュ中に少し無敵時間を設ける
+        @yukko.temporary_invincible!(DashCostume.attacking_time * 1.5)
         true
       end
 
