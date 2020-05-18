@@ -11,7 +11,33 @@ module DigYukko
     # ランダムではなく固定マップを生成する
     def generate_lines(line_length)
       res = []
-      (DEPTH - 12).times do
+      (DEPTH - 27).times do
+        line = Array.new(3, UnbreakableBlock)
+        line += Array.new(line_length - 6, nil)
+        line += Array.new(3, UnbreakableBlock)
+        res << line
+      end
+      2.times do
+        res << (Array.new(3, UnbreakableBlock) +
+                Array.new(line_length - 6, BreakableBlock) +
+                Array.new(3, UnbreakableBlock))
+      end
+      res << (Array.new(3, UnbreakableBlock) +
+              Array.new(2, BreakableBlock) +
+              Array.new(line_length - 5, UnbreakableBlock))
+      res << (Array.new(3, UnbreakableBlock) +
+              Array.new(line_length - 6, BreakableBlock) +
+              Array.new(3, UnbreakableBlock))
+      res << (Array.new(line_length - 5, UnbreakableBlock) +
+              Array.new(2, BreakableBlock) +
+              Array.new(3, UnbreakableBlock))
+      res << (Array.new(3, UnbreakableBlock) +
+              Array.new(line_length - 6, BreakableBlock) +
+              Array.new(3, UnbreakableBlock))
+      res << (Array.new(3, UnbreakableBlock) +
+              Array.new(2, BreakableBlock) +
+              Array.new(line_length - 5, UnbreakableBlock))
+      8.times do
         line = Array.new(3, UnbreakableBlock)
         line += Array.new(line_length - 6, nil)
         line += Array.new(3, UnbreakableBlock)
