@@ -148,7 +148,7 @@ module DigYukko
     end
 
     def create_field_bg
-      cell_image = UnbreakableBlock.image.change_hls(0, -60, 0)
+      cell_image = UnbreakableBlock::BG_IMAGE
       col_size = @field.width / cell_image.width
       row_size = @field.height / cell_image.height
       row_size.times do |y|

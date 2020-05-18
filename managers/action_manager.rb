@@ -2,7 +2,10 @@ module DigYukko
   module ActionManager
     class << self
       def init(yukko = nil, combo_counter = nil, depth_counter = nil, extra_counter = nil, score = 0, map = nil)
-        LevelManager.init if yukko.nil?
+        if yukko.nil?
+          LevelManager.init
+          UnbreakableBlock.reset_color
+        end
         @yukko = yukko || Yukko.new
         @map = map || Map.new(@yukko, score)
         @combo_counter = combo_counter || ComboCounter.new
@@ -83,9 +86,11 @@ module DigYukko
       end
 
       def next_scene
-        if clear?
+        current_level = LevelManager.calc_level(progress_score)
+        if clear?(current_level)
           FinishActionScene.new(@yukko, @combo_counter, @depth_counter, @extra_power_counter, @score_counter.score)
         else
+          UnbreakableBlock.change_color(current_level)
           ActionScene.new(@yukko, @combo_counter, @depth_counter, @extra_power_counter, @score_counter.score)
         end
       end
@@ -94,8 +99,8 @@ module DigYukko
         (@depth_counter.count / 3).to_i + @combo_counter.score
       end
 
-      def clear?
-        current_level = LevelManager.calc_level(progress_score)
+      def clear?(current_level = nil)
+        current_level ||= LevelManager.calc_level(progress_score)
         DigYukko.log(:debug, "check clear condition: #{Config['clear_condition']} <= #{current_level}")
         Config['clear_condition'] <= current_level
       end
