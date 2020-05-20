@@ -4,7 +4,8 @@ module DigYukko
 
     POSITION = { x: Config['window.width'] - 80, y: 60 }
     DISPLAY_THRESHOLD = 2
-    COMBO_TIMER = 60
+    COMBO_TIMER = 90
+    ADDITIONAL_TIME = 60
     TIMER_GAGE_IMAGE = ::DXRuby::Image.new(1, 5, [255, 155, 0])
     # コンボ数の表示用オプション
     NUMBER_OPTIONS = {
@@ -55,7 +56,8 @@ module DigYukko
       @stop = false
       @count += 1
       @score += @count if (@count % SCORE_UP_UNIT).zero?
-      @timer = COMBO_TIMER
+      @timer += ADDITIONAL_TIME
+      @timer -= (@timer % COMBO_TIMER) * (@timer / COMBO_TIMER)
       @scale = 0.2
       update_count_str
       if @count > @max_combo
