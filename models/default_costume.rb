@@ -3,8 +3,7 @@ module DigYukko
   class DefaultCostume < Costume
     IMAGE_SPLIT_X = 8
     IMAGE_SPLIT_Y = 2
-    # TODO: 画像を初期キャラクター画像にする
-    IMAGES = load_image_tiles('star_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
+    IMAGES = load_image_tiles('default_yukko', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
 
     set_max_extra_power 100
     set_attacking_time 5
