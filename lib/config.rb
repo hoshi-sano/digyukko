@@ -25,7 +25,6 @@ module DigYukko
         failed_message: 'ERROR: cannot open tweet window...',
         hashtag: 'digyukko',
       },
-      # TODO: 仮の値なので調整すること
       clear_condition: 20,
       debug: false,
     }
