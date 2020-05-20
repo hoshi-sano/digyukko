@@ -106,6 +106,13 @@ module DigYukko
     end
 
     class ExtraWeapon < ProjectileCostume::Weapon
+      def enable(key_x, key_y)
+        if @projectiles.size < self.class::MAX_PROJECTILE_NUM
+          @projectiles << self.class::Projectile.new(self)
+          true
+        end
+      end
+
       class Projectile < ProjectileCostume::Weapon::Projectile
         def shot(obj)
           obj.break
