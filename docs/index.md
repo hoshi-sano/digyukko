@@ -12,6 +12,10 @@ image: https://github.com/hoshi-sano/digyukko/wiki/images/logo.png
 
 * [digyukko-v0.0.1.zip](https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.1.zip)
 
+#### 注意
+
+上記ファイルをダウンロードし、利用することによって生じるあらゆる問題や損害に対して、制作者は一切の責任を負いませんので予めご了承ください。
+
 # 遊び方
 
 ## インストール・アンインストール
