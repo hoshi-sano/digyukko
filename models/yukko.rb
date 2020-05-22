@@ -293,7 +293,7 @@ module DigYukko
     def update_extra_skill_time
       return unless @extra_skill_time
       @extra_skill_time += 1
-      finish_extra_skill_animation if @extra_skill_time > 5
+      finish_extra_skill_animation if @extra_skill_time > current_attacking_time
     end
 
     def extra_skill_using?

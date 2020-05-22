@@ -27,7 +27,7 @@ module DigYukko
       include HelperMethods
 
       X_IMAGE = Image.new(1, 1, debug_color)
-      Y_IMAGE = Image.new(32, 5, debug_color)
+      Y_IMAGE = DefaultCostume::Weapon::Y_IMAGE
       IMAGE_SPLIT_X = 4
       IMAGE_SPLIT_Y = 2
       PROJECTILE_IMAGES = load_image_tiles('projectile', IMAGE_SPLIT_X, IMAGE_SPLIT_Y)
