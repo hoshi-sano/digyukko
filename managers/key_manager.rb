@@ -2,6 +2,7 @@ module DigYukko
   module KeyManager
     class << self
       def init
+        ::DXRuby::Input.set_repeat(Config['key_interval'], Config['key_interval'])
         # 本アプリケーションではパッドも含めたキーコンフィグ機能
         # があるため、DXRubyが提供するキーとパッドの関連付けは
         # リセットする

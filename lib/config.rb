@@ -18,6 +18,7 @@ module DigYukko
         width:  800,
         height: 480,
       },
+      key_interval: 10,
       share: {
         url: nil,
         clear_text: 'GAME CLEAR!',
