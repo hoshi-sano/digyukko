@@ -10,7 +10,20 @@ image: https://github.com/hoshi-sano/digyukko/wiki/images/logo.png
 
 ### for Windows
 
-* [digyukko-v0.0.1.zip](https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.1.zip)
+**最新バージョン**
+
+* [digyukko-v0.0.2.zip](https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.2.zip)
+
+<details>
+<summary>旧バージョン</summary>
+
+<ul>
+  <li>
+    <a href="https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.1.zip">digyukko-v0.0.1.zip</a>
+  </li>
+</ul>
+
+</details>
 
 #### 注意
 
