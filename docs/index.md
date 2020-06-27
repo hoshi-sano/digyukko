@@ -12,12 +12,15 @@ image: https://github.com/hoshi-sano/digyukko/wiki/images/logo.png
 
 **最新バージョン**
 
-* [digyukko-v0.0.2.zip](https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.2.zip)
+* [digyukko-v0.0.3.zip](https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.3.zip)
 
 <details>
 <summary>旧バージョン</summary>
 
 <ul>
+  <li>
+    <a href="https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.2.zip">digyukko-v0.0.2.zip</a>
+  </li>
   <li>
     <a href="https://github.com/hoshi-sano/digyukko/wiki/releases/digyukko-v0.0.1.zip">digyukko-v0.0.1.zip</a>
   </li>
