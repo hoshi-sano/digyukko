@@ -6,7 +6,9 @@ module DigYukko
       extra:  ::DXRuby::K_C,
     }
 
-    KEYS = (:A..:Z).map { |char| :"K_#{char}" }
+    KEYS =
+      (:A..:Z).map { |char| :"K_#{char}" } +
+      [:K_SPACE, :K_RETURN, :K_LCONTROL, :K_LSHIFT, :K_TAB]
     PAD_BUTTONS = [:P_UP, :P_DOWN, :P_LEFT, :P_RIGHT, *(0..15).map { |n| :"P_BUTTON#{n}" }]
     TABLE = (KEYS + PAD_BUTTONS).map { |sym|
       [sym, ::DXRuby.const_get(sym)]
